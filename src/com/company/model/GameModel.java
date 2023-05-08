@@ -1,11 +1,12 @@
-package model;
+package com.company.model;
 
-import view.Observer;
+
+
 enum GameState{START, CHECK, CHECKMATE, TIE}
 public class GameModel extends Subject{
     Player whitePlayer;
     Player blackPlayer;
-    Player inTurn;
+    Boolean turn;
     Board board;
     Move[] listOfMovement;
     GameState state;
@@ -13,7 +14,7 @@ public class GameModel extends Subject{
     public boolean movePiece(Move move){
         //TODO:IMPLEMENTARE MEGLIO (solo idea)
         if(checkLegalMove(move)) {
-            board.update(move, move.startSquare.piece);
+            board.updateBoard(move, move.startSquare.piece);
             return true;
         }else {
             return false;

@@ -1,4 +1,4 @@
-package model;
+package com.company.model;
 
 public class Player {
     String name = "";
@@ -25,12 +25,9 @@ public class Player {
     }
 
     public boolean isWhite(){
-        if(this.color == Color.WHITE){
-            return true;
-        }else{
-            return false;
-        }
+        return this.color == Color.WHITE;
     }
+
     public String getName(){
         return this.name;
     }

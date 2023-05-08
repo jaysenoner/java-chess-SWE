@@ -1,6 +1,6 @@
-package model;
+package com.company.model;
 
-import view.Observer;
+import com.company.view.Observer;
 
 public abstract class Subject {
     Observer[] list;

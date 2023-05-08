@@ -1,8 +1,8 @@
-package view;
+package com.company.view;
 
-import control.GameController;
-import control.MoveController;
-import model.Subject;
+import com.company.control.GameController;
+import com.company.control.MoveController;
+import com.company.model.Subject;
 
 public class ChessObserver extends Observer {
     private Subject model;
