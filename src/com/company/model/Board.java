@@ -1,5 +1,5 @@
 package com.company.model;
-import com.company.model.Color;
+
 
 import com.company.model.pieces.*;
 
@@ -15,7 +15,8 @@ public class Board {
         this.squares= new Square[height][width];
         int count = 0;
 
-        //Assegno i colori alle case
+        //
+        // Creo tutte le caselle della scacchiera,assegnandogli le coordinate e i colori
 
         for(int i=0; i<8; i++) {
             for (int j = 0; j < 8; j++) {
@@ -100,10 +101,12 @@ public class Board {
         return squares[pos.getRow()][pos.getCol()];
     }
 
-    public void updateBoard(Move move, Piece p){
+
+    // Data una mosssa move LEGALE (verificata dal controller) effettua lo spostamento sulla scacchiera
+    public void updateBoard(Move move){
         move.startSquare.piece.setHasMoved(true);
+        move.endSquare.piece = move.startSquare.piece;
         move.startSquare.piece= null;
-        move.endSquare.piece = p;
     }
 
 

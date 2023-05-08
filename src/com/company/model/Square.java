@@ -18,6 +18,7 @@ public class Square {
     public void setPiece(Piece p){
         this.piece= p;
         this.occupied = true;
+        piece.setPosition(position);
     }
     public void setOccupied(Boolean occupied) {
         this.occupied = occupied;

@@ -14,7 +14,7 @@ public class GameModel extends Subject{
     public boolean movePiece(Move move){
         //TODO:IMPLEMENTARE MEGLIO (solo idea)
         if(checkLegalMove(move)) {
-            board.updateBoard(move, move.startSquare.piece);
+            board.updateBoard(move);
             return true;
         }else {
             return false;
