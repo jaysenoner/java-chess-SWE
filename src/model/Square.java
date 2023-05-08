@@ -1,31 +1,20 @@
 package model;
 
-public abstract class Square {
+public class Square {
 
     Coordinate position;
+    Boolean occupied;
+    Color color;
+    Piece piece;
 
-    public abstract boolean isOccupied();
-
-}
-
-class EmptySquare extends Square {
-
-
-    @Override
     public boolean isOccupied() {
-        return false;
+        return occupied;
     }
-}
-
-class OccupiedSquare extends Square {
-
-   // Piece piece;   //TODO: implement Piece
-
-    @Override
-    public boolean isOccupied() {
-        return true;
+    public void setPiece(Piece p){
+        this.piece= p;
     }
 
-
-
+    public void setOccupied(Boolean occupied) {
+        this.occupied = occupied;
+    }
 }

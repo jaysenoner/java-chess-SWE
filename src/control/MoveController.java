@@ -1,5 +1,4 @@
 package control;
 
-public class MoveController extends Controller {
-
+public class MoveController extends Controller{
 }

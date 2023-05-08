@@ -2,10 +2,10 @@ package view;
 
 import control.GameController;
 import control.MoveController;
-import model.GameModel;
+import model.Subject;
 
-public class ChessView extends View {
-    private GameModel model;
+public class ChessObserver extends Observer {
+    private Subject model;
     private MoveController move;
     private GameController game;
 

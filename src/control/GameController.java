@@ -1,5 +1,4 @@
 package control;
 
-public class GameController extends Controller {
-
+public class GameController extends Controller{
 }
