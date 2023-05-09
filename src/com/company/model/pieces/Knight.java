@@ -3,9 +3,6 @@ package com.company.model.pieces;
 
 import com.company.model.Board;
 import com.company.model.Color;
-import com.company.model.Move;
-
-import java.util.ArrayList;
 
 public class Knight extends Piece{
 
@@ -14,7 +11,7 @@ public class Knight extends Piece{
     }
 
     @Override
-    public ArrayList<Move> getPossibleMoves(final Board board) {
-        return null;
+    public void setPossibleMoves(final Board board) {
+
     }
 }

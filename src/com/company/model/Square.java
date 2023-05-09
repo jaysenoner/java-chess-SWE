@@ -6,6 +6,11 @@ public class Square {
     Coordinate position;
     Boolean occupied = false;
     Color color;
+
+    public Piece getPiece() {
+        return piece;
+    }
+
     Piece piece;
 
     public Square(Coordinate position, Color color) {

@@ -1,7 +1,5 @@
 package com.company.model;
 
-
-
 enum GameState{START, CHECK, CHECKMATE, TIE}
 public class GameModel extends Subject{
     Player whitePlayer;
@@ -14,7 +12,7 @@ public class GameModel extends Subject{
     public boolean movePiece(Move move){
         //TODO:IMPLEMENTARE MEGLIO (solo idea)
         if(checkLegalMove(move)) {
-            board.updateBoard(move);
+           // board.updateBoard(move);
             return true;
         }else {
             return false;

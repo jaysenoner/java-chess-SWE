@@ -1,7 +1,6 @@
 package com.company.model;
 
 public class Coordinate {
-
     private int row;
     private int col;
 

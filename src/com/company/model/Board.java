@@ -1,7 +1,8 @@
 package com.company.model;
 
-
 import com.company.model.pieces.*;
+
+import java.util.ArrayList;
 
 public class Board {
     int width =8;
@@ -15,8 +16,7 @@ public class Board {
         this.squares= new Square[height][width];
         int count = 0;
 
-        //
-        // Creo tutte le caselle della scacchiera,assegnandogli le coordinate e i colori
+        //Assegno i colori alle case
 
         for(int i=0; i<8; i++) {
             for (int j = 0; j < 8; j++) {
@@ -101,13 +101,66 @@ public class Board {
         return squares[pos.getRow()][pos.getCol()];
     }
 
-
-    // Data una mosssa move LEGALE (verificata dal controller) effettua lo spostamento sulla scacchiera
-    public void updateBoard(Move move){
+    public void updateBoard(Move move, Piece p){
         move.startSquare.piece.setHasMoved(true);
-        move.endSquare.piece = move.startSquare.piece;
         move.startSquare.piece= null;
+        move.endSquare.piece = p;
+    }
+    public Square[][] getSquares(){
+        return squares;
     }
 
+    /* metodo che restituisce un array con tutte le mosse possibili che il pezzo può fare in diagonale, o per tutta la lunghezza
+    della diagonale (alfiere), o solo per una casella in diagonale (re). se allMoves è true controlla tutta la diagonale.
+     */
+     public ArrayList<Move> diagonalMoves(Coordinate startPosition, boolean allMoves){
+         ArrayList<Move> listOfMove= new ArrayList<>();
+         int col = startPosition.getCol();
+         int row = startPosition.getRow();
+         Square startSquare = getSquare(startPosition);
+
+         boolean stop = false;
+         int i = row, j = col;
+         while (!stop && i < 8 && i >= 0 && j < 8 && j >= 0) {
+             i++;
+             j++;
+             Move move= new Move(startSquare, squares[i][j]);
+             stop = move.checkMove(listOfMove);
+             if(!allMoves){stop = true;}
+         }
+         stop = false;
+         i = row;
+         j = col;
+         while (!stop && i < 8 && i >= 0 && j < 8 && j >= 0) {
+             i--;
+             j--;
+             Move move= new Move(startSquare, squares[i][j]);
+             stop = move.checkMove(listOfMove);
+             if(!allMoves){stop = true;}
+         }
+         stop = false;
+         i = row;
+         j = col;
+         while (!stop && i < 8 && i >= 0 && j < 8 && j >= 0) {
+             i++;
+             j--;
+             Move move= new Move(startSquare, squares[i][j]);
+             stop = move.checkMove(listOfMove);
+             if(!allMoves){stop = true;}
+         }
+         stop = false;
+         i = row;
+         j = col;
+         while (!stop && i < 8 && i >= 0 && j < 8 && j >= 0) {
+             i--;
+             j++;
+             Move move= new Move(startSquare, squares[i][j]);
+             stop = move.checkMove(listOfMove);
+             if(!allMoves){stop = true;}
+         }
+         return listOfMove;
+     }
 
 }
+
+
