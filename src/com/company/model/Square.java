@@ -6,11 +6,6 @@ public class Square {
     Coordinate position;
     Boolean occupied = false;
     Color color;
-
-    public Piece getPiece() {
-        return piece;
-    }
-
     Piece piece;
 
     public Square(Coordinate position, Color color) {
@@ -19,6 +14,9 @@ public class Square {
     }
     public boolean isOccupied() {
         return occupied;
+    }
+    public Piece getPiece() {
+        return piece;
     }
     public void setPiece(Piece p){
         this.piece= p;

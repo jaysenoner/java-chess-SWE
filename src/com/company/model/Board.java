@@ -160,7 +160,143 @@ public class Board {
          }
          return listOfMove;
      }
+    /* metodo che restituisce un array con tutte le mosse possibili che il pezzo può fare in orizzontale,
+    o per tutta la lunghezza della riga (torre), o solo per una casella (re). se allMoves è true controlla
+    tutta la riga.*/
+    public ArrayList<Move> horizontalMoves(Coordinate startPosition, boolean allMoves){
+        ArrayList<Move> listOfMove= new ArrayList<>();
+        int col = startPosition.getCol();
+        int row = startPosition.getRow();
+        Square startSquare = getSquare(startPosition);
 
+        boolean stop = false;
+        int i = row, j = col;
+        while (!stop && j < 8 && j >= 0) {
+            j++;
+            Move move= new Move(startSquare, squares[i][j]);
+            stop = move.checkMove(listOfMove);
+            if(!allMoves){stop = true;}
+        }
+        stop = false;
+        j = col;
+        while (!stop && j < 8 && j >= 0) {
+            j--;
+            Move move= new Move(startSquare, squares[i][j]);
+            stop = move.checkMove(listOfMove);
+            if(!allMoves){stop = true;}
+        }
+        return listOfMove;
+    }
+    /* metodo che restituisce un array con tutte le mosse possibili che il pezzo può fare in verticale,
+    o per tutta la lunghezza della riga (torre), o solo per una casella (re). se allMoves è true controlla
+    tutta la colonna.*/
+    public ArrayList<Move> verticalMoves(Coordinate startPosition, boolean allMoves){
+        ArrayList<Move> listOfMove= new ArrayList<>();
+        int col = startPosition.getCol();
+        int row = startPosition.getRow();
+        Square startSquare = getSquare(startPosition);
+
+        boolean stop = false;
+        int i = row, j = col;
+        while (!stop && i < 8 && i >= 0) {
+            i++;
+            Move move= new Move(startSquare, squares[i][j]);
+            stop = move.checkMove(listOfMove);
+            if(!allMoves){stop = true;}
+        }
+        stop = false;
+        i = row;
+        while (!stop && i < 8 && i >= 0) {
+            i--;
+            Move move= new Move(startSquare, squares[i][j]);
+            stop = move.checkMove(listOfMove);
+            if(!allMoves){stop = true;}
+        }
+        return listOfMove;
+    }
+    /* metodo che restituisce un array con tutte le mosse possibili che il pezzo può fare in orizzontale,
+    o per tutta la lunghezza della riga (torre), o solo per una casella (re). se allMoves è true controlla
+    tutta la diagonale.*/
+    public ArrayList<Move> pawnMovement(Coordinate startPosition){
+        ArrayList<Move> listOfMove= new ArrayList<>();
+        int col = startPosition.getCol();
+        int row = startPosition.getRow();
+        Square startSquare = getSquare(startPosition);
+        int i = row, j = col;
+        if (startSquare.getPiece().getColor() == Color.WHITE){
+            if(i>0 && j>0) {
+                if (squares[i - 1][j - 1].isOccupied() && squares[i - 1][j - 1].getPiece().getColor() == Color.BLACK) {
+                    listOfMove.add(new Move(startSquare, squares[i - 1][j - 1]));
+                }
+            }
+            if(i>0 && j<7) {
+                if (squares[i - 1][j + 1].isOccupied() && squares[i - 1][j + 1].getPiece().getColor() == Color.BLACK) {
+                    listOfMove.add(new Move(startSquare, squares[i - 1][j + 1]));
+                }
+            }
+        }else {
+            if (i < 7 && j > 0) {
+                if (squares[i + 1][j - 1].isOccupied() && squares[i + 1][j - 1].getPiece().getColor() == Color.WHITE) {
+                    listOfMove.add(new Move(startSquare, squares[i + 1][j - 1]));
+                }
+            }
+            if (i < 7 && j < 7) {
+                if (squares[i + 1][j + 1].isOccupied() && squares[i + 1][j + 1].getPiece().getColor() == Color.WHITE) {
+                    listOfMove.add(new Move(startSquare, squares[i + 1][j + 1]));
+                }
+            }
+        }
+        if(squares[i][j].getPiece().isFirstMove() && !squares[i+2][j].isOccupied() ){
+            listOfMove.add(new Move(startSquare, squares[i+2][j]));
+        }
+        if(!squares[i+1][j].isOccupied()){
+            listOfMove.add(new Move(startSquare, squares[i+1][j]));
+        }
+        return listOfMove;
+    }
+    public ArrayList<Move> knightMovement(Coordinate startPosition){
+        ArrayList<Move> listOfMove = new ArrayList<>();
+        Coordinate c= new Coordinate(startPosition.getRow() +1, startPosition.getCol() +2);
+        if (c.isValid()){
+            listOfMove.add(new Move(getSquare(startPosition),getSquare(c) ));
+        }
+        c.setRow(startPosition.getRow() +2);
+        c.setCol(startPosition.getCol() +1);
+        if (c.isValid()){
+            listOfMove.add(new Move(getSquare(startPosition),getSquare(c) ));
+        }
+        c.setRow(startPosition.getRow() -2);
+        c.setCol(startPosition.getCol() -1);
+        if (c.isValid()){
+            listOfMove.add(new Move(getSquare(startPosition),getSquare(c) ));
+        }
+        c.setRow(startPosition.getRow() -1);
+        c.setCol(startPosition.getCol() -2);
+        if (c.isValid()){
+            listOfMove.add(new Move(getSquare(startPosition),getSquare(c) ));
+        }
+        c.setRow(startPosition.getRow() -2);
+        c.setCol(startPosition.getCol() +1);
+        if (c.isValid()){
+            listOfMove.add(new Move(getSquare(startPosition),getSquare(c) ));
+        }
+        c.setRow(startPosition.getRow() -1);
+        c.setCol(startPosition.getCol() +2);
+        if (c.isValid()){
+            listOfMove.add(new Move(getSquare(startPosition),getSquare(c) ));
+        }
+        c.setRow(startPosition.getRow() +2);
+        c.setCol(startPosition.getCol() -1);
+        if (c.isValid()){
+            listOfMove.add(new Move(getSquare(startPosition),getSquare(c) ));
+        }
+        c.setRow(startPosition.getRow() +1);
+        c.setCol(startPosition.getCol() -2);
+        if (c.isValid()){
+            listOfMove.add(new Move(getSquare(startPosition),getSquare(c) ));
+        }
+        return listOfMove;
+    }
 }
 
 

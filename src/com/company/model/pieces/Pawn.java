@@ -3,6 +3,10 @@ package com.company.model.pieces;
 
 import com.company.model.Board;
 import com.company.model.Color;
+import com.company.model.Coordinate;
+import com.company.model.Move;
+
+import java.util.ArrayList;
 
 public class Pawn extends Piece{
 
@@ -12,6 +16,10 @@ public class Pawn extends Piece{
 
     @Override
     public void setPossibleMoves(final Board board) {
-        //TODO: vedere se va bene il controllo diagonale
+        Coordinate startPosition = getPosition();
+        ArrayList<Move> listOfMoves = board.pawnMovement(startPosition);
+        for (Move move :listOfMoves ){
+            getPossibleMoves().add(move);
+        }
     }
 }

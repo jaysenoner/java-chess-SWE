@@ -21,6 +21,15 @@ public class Queen extends Piece{
         for (Move move :listOfMoves ){
             getPossibleMoves().add(move);
         }
-        //TODO: aggiungere mosse in orizzontale e verticale
+        //mosse in orizzontale
+        listOfMoves= board.horizontalMoves(startPosition, true);
+        for (Move move :listOfMoves ){
+            getPossibleMoves().add(move);
+        }
+        //mosse verticali
+        listOfMoves= board.verticalMoves(startPosition, true);
+        for (Move move :listOfMoves ){
+            getPossibleMoves().add(move);
+        }
     }
 }
