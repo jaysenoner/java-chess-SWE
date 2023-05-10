@@ -12,19 +12,20 @@ public class Board {
 
 
     public Board() {
+
         this.isFirstTurn = true;
-        this.squares= new Square[height][width];
+        this.squares = new Square[height][width];
         int count = 0;
 
         //Assegno i colori alle case
 
-        for(int i=0; i<8; i++) {
+        for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
-                Coordinate c= new Coordinate(i,j);
-                if( (count)%2 ==0){
-                    squares[i][j]= new Square(c, Color.WHITE);
-                }else{
-                    squares[i][j]= new Square(c, Color.BLACK);
+                Coordinate c = new Coordinate(i, j);
+                if ((count) % 2 == 0) {
+                    squares[i][j] = new Square(c, Color.WHITE);
+                } else {
+                    squares[i][j] = new Square(c, Color.BLACK);
                 }
                 count++;
             }
@@ -33,14 +34,14 @@ public class Board {
 
 
         //costruisco i vari pezzi nelle case di partenza
-        for(int i=2; i<5; i++) {
+        for (int i = 2; i < 5; i++) {
             for (int j = 0; j < 8; j++) {
                 squares[i][j] = null;
             }
         }
 
         //Posiziono pedoni
-        for(int j = 0; j<8; j++){
+        for (int j = 0; j < 8; j++) {
             squares[1][j].setPiece(new Pawn(Color.BLACK));
             squares[6][j].setPiece(new Pawn(Color.WHITE));
         }
@@ -111,9 +112,9 @@ public class Board {
     }
 
     /* metodo che restituisce un array con tutte le mosse possibili che il pezzo può fare in diagonale, o per tutta la lunghezza
-    della diagonale (alfiere), o solo per una casella in diagonale (re). se allMoves è true controlla tutta la diagonale.
+    della diagonale (alfiere), o solo per una casella in diagonale (re). se checkAllDiagonal è true controlla tutta la diagonale.
      */
-     public ArrayList<Move> diagonalMoves(Coordinate startPosition, boolean allMoves){
+     public ArrayList<Move> diagonalMoves(Coordinate startPosition, boolean checkAllDiagonal){
          ArrayList<Move> listOfMove= new ArrayList<>();
          int col = startPosition.getCol();
          int row = startPosition.getRow();
@@ -126,7 +127,7 @@ public class Board {
              j++;
              Move move= new Move(startSquare, squares[i][j]);
              stop = move.checkMove(listOfMove);
-             if(!allMoves){stop = true;}
+             if(!checkAllDiagonal){stop = true;}
          }
          stop = false;
          i = row;
@@ -136,7 +137,7 @@ public class Board {
              j--;
              Move move= new Move(startSquare, squares[i][j]);
              stop = move.checkMove(listOfMove);
-             if(!allMoves){stop = true;}
+             if(!checkAllDiagonal){stop = true;}
          }
          stop = false;
          i = row;
@@ -146,7 +147,7 @@ public class Board {
              j--;
              Move move= new Move(startSquare, squares[i][j]);
              stop = move.checkMove(listOfMove);
-             if(!allMoves){stop = true;}
+             if(!checkAllDiagonal){stop = true;}
          }
          stop = false;
          i = row;
@@ -156,14 +157,14 @@ public class Board {
              j++;
              Move move= new Move(startSquare, squares[i][j]);
              stop = move.checkMove(listOfMove);
-             if(!allMoves){stop = true;}
+             if(!checkAllDiagonal){stop = true;}
          }
          return listOfMove;
      }
     /* metodo che restituisce un array con tutte le mosse possibili che il pezzo può fare in orizzontale,
-    o per tutta la lunghezza della riga (torre), o solo per una casella (re). se allMoves è true controlla
+    o per tutta la lunghezza della riga (torre), o solo per una casella (re). se checkAllRow è true controlla
     tutta la riga.*/
-    public ArrayList<Move> horizontalMoves(Coordinate startPosition, boolean allMoves){
+    public ArrayList<Move> horizontalMoves(Coordinate startPosition, boolean checkAllRow){
         ArrayList<Move> listOfMove= new ArrayList<>();
         int col = startPosition.getCol();
         int row = startPosition.getRow();
@@ -175,7 +176,7 @@ public class Board {
             j++;
             Move move= new Move(startSquare, squares[i][j]);
             stop = move.checkMove(listOfMove);
-            if(!allMoves){stop = true;}
+            if(!checkAllRow){stop = true;}
         }
         stop = false;
         j = col;
@@ -183,14 +184,14 @@ public class Board {
             j--;
             Move move= new Move(startSquare, squares[i][j]);
             stop = move.checkMove(listOfMove);
-            if(!allMoves){stop = true;}
+            if(!checkAllRow){stop = true;}
         }
         return listOfMove;
     }
     /* metodo che restituisce un array con tutte le mosse possibili che il pezzo può fare in verticale,
-    o per tutta la lunghezza della riga (torre), o solo per una casella (re). se allMoves è true controlla
+    o per tutta la lunghezza della riga (torre), o solo per una casella (re). se checkAllCol è true controlla
     tutta la colonna.*/
-    public ArrayList<Move> verticalMoves(Coordinate startPosition, boolean allMoves){
+    public ArrayList<Move> verticalMoves(Coordinate startPosition, boolean checkAllCol){
         ArrayList<Move> listOfMove= new ArrayList<>();
         int col = startPosition.getCol();
         int row = startPosition.getRow();
@@ -202,7 +203,7 @@ public class Board {
             i++;
             Move move= new Move(startSquare, squares[i][j]);
             stop = move.checkMove(listOfMove);
-            if(!allMoves){stop = true;}
+            if(!checkAllCol){stop = true;}
         }
         stop = false;
         i = row;
@@ -210,7 +211,7 @@ public class Board {
             i--;
             Move move= new Move(startSquare, squares[i][j]);
             stop = move.checkMove(listOfMove);
-            if(!allMoves){stop = true;}
+            if(!checkAllCol){stop = true;}
         }
         return listOfMove;
     }
