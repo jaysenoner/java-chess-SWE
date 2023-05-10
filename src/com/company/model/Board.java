@@ -223,41 +223,41 @@ public class Board {
         int col = startPosition.getCol();
         int row = startPosition.getRow();
         Square startSquare = getSquare(startPosition);
-        int i = row, j = col;
         if (startSquare.getPiece().getColor() == Color.WHITE){
-            if(i>0 && j>0) {
-                if (squares[i - 1][j - 1].isOccupied() && squares[i - 1][j - 1].getPiece().getColor() == Color.BLACK) {
-                    listOfMove.add(new Move(startSquare, squares[i - 1][j - 1]));
+            if(row >0 && col >0) {
+                if (squares[row - 1][col - 1].isOccupied() && squares[row - 1][col - 1].getPiece().getColor() == Color.BLACK) {
+                    listOfMove.add(new Move(startSquare, squares[row - 1][col - 1]));
                 }
             }
-            if(i>0 && j<7) {
-                if (squares[i - 1][j + 1].isOccupied() && squares[i - 1][j + 1].getPiece().getColor() == Color.BLACK) {
-                    listOfMove.add(new Move(startSquare, squares[i - 1][j + 1]));
+            if(row >0 && col <7) {
+                if (squares[row - 1][col + 1].isOccupied() && squares[row - 1][col + 1].getPiece().getColor() == Color.BLACK) {
+                    listOfMove.add(new Move(startSquare, squares[row - 1][col + 1]));
                 }
             }
         }else {
-            if (i < 7 && j > 0) {
-                if (squares[i + 1][j - 1].isOccupied() && squares[i + 1][j - 1].getPiece().getColor() == Color.WHITE) {
-                    listOfMove.add(new Move(startSquare, squares[i + 1][j - 1]));
+            if (row < 7 && col > 0) {
+                if (squares[row + 1][col - 1].isOccupied() && squares[row + 1][col - 1].getPiece().getColor() == Color.WHITE) {
+                    listOfMove.add(new Move(startSquare, squares[row + 1][col - 1]));
                 }
             }
-            if (i < 7 && j < 7) {
-                if (squares[i + 1][j + 1].isOccupied() && squares[i + 1][j + 1].getPiece().getColor() == Color.WHITE) {
-                    listOfMove.add(new Move(startSquare, squares[i + 1][j + 1]));
+            if (row < 7 && col < 7) {
+                if (squares[row + 1][col + 1].isOccupied() && squares[row + 1][col + 1].getPiece().getColor() == Color.WHITE) {
+                    listOfMove.add(new Move(startSquare, squares[row + 1][col + 1]));
                 }
             }
         }
-        if(squares[i][j].getPiece().isFirstMove() && !squares[i+2][j].isOccupied() ){
-            listOfMove.add(new Move(startSquare, squares[i+2][j]));
+        if(squares[row][col].getPiece().isFirstMove()  && !squares[row +1][col].isOccupied() && !squares[row +2][col].isOccupied() ){
+            listOfMove.add(new Move(startSquare, squares[row +2][col]));
         }
-        if(!squares[i+1][j].isOccupied()){
-            listOfMove.add(new Move(startSquare, squares[i+1][j]));
+        if(!squares[row +1][col].isOccupied()){
+            listOfMove.add(new Move(startSquare, squares[row +1][col]));
         }
         return listOfMove;
     }
+    //TODO: completare! manca controllare se posizione occupata da ns pezzo, mancano dei movimenti
     public ArrayList<Move> knightMovement(Coordinate startPosition){
         ArrayList<Move> listOfMove = new ArrayList<>();
-        Coordinate c= new Coordinate(startPosition.getRow() +1, startPosition.getCol() +2);
+        Coordinate c = new Coordinate(startPosition.getRow() +1, startPosition.getCol() +2);
         if (c.isValid()){
             listOfMove.add(new Move(getSquare(startPosition),getSquare(c) ));
         }

@@ -12,7 +12,7 @@ public abstract class Piece {
     private boolean hasMoved = false;
     private boolean firstMove= false;
     private Coordinate position;
-    private ArrayList<Move> possibleMoves;
+    protected ArrayList<Move> possibleMoves;
 
     public Piece(Color color) {
         this.color= color;

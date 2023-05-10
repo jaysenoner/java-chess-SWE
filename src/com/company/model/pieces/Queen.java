@@ -17,19 +17,11 @@ public class Queen extends Piece{
     @Override
     public void setPossibleMoves(final Board board) {
         Coordinate startPosition = getPosition();
-        ArrayList<Move> listOfMoves = board.diagonalMoves(startPosition, true);
-        for (Move move :listOfMoves ){
-            getPossibleMoves().add(move);
-        }
+        //mosse diagonali
+        possibleMoves.addAll(board.diagonalMoves(startPosition, true));
         //mosse in orizzontale
-        listOfMoves= board.horizontalMoves(startPosition, true);
-        for (Move move :listOfMoves ){
-            getPossibleMoves().add(move);
-        }
+        possibleMoves.addAll(board.horizontalMoves(startPosition, true));
         //mosse verticali
-        listOfMoves= board.verticalMoves(startPosition, true);
-        for (Move move :listOfMoves ){
-            getPossibleMoves().add(move);
-        }
+        possibleMoves.addAll(board.verticalMoves(startPosition, true));
     }
 }

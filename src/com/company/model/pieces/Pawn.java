@@ -17,9 +17,6 @@ public class Pawn extends Piece{
     @Override
     public void setPossibleMoves(final Board board) {
         Coordinate startPosition = getPosition();
-        ArrayList<Move> listOfMoves = board.pawnMovement(startPosition);
-        for (Move move :listOfMoves ){
-            getPossibleMoves().add(move);
-        }
+        possibleMoves.addAll(board.pawnMovement(startPosition));
     }
 }

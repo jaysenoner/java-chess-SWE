@@ -30,21 +30,12 @@ public class King extends Piece{
     @Override
     public void setPossibleMoves(final Board board) {
         Coordinate startPosition = getPosition();
-        //mosse in diagonale
-        ArrayList<Move> listOfMoves = board.diagonalMoves(startPosition, false);
-        for (Move move :listOfMoves ){
-            getPossibleMoves().add(move);
-        }
+        //mosse diagonali
+        possibleMoves.addAll(board.diagonalMoves(startPosition, false));
         //mosse in orizzontale
-        listOfMoves= board.horizontalMoves(startPosition, false);
-        for (Move move :listOfMoves ){
-            getPossibleMoves().add(move);
-        }
+        possibleMoves.addAll(board.horizontalMoves(startPosition, false));
         //mosse verticali
-        listOfMoves= board.verticalMoves(startPosition, false);
-        for (Move move :listOfMoves ){
-            getPossibleMoves().add(move);
-        }
+        possibleMoves.addAll(board.verticalMoves(startPosition, false));
     }
 
 
