@@ -26,4 +26,7 @@ public class Square {
     public void setOccupied(Boolean occupied) {
         this.occupied = occupied;
     }
+    public Coordinate getPosition() {
+        return position;
+    }
 }
