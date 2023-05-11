@@ -5,14 +5,13 @@ import java.util.ArrayList;
 public class Move {
     Square startSquare;
 
-    public void setEndSquare(Square endSquare) {
-        this.endSquare = endSquare;
-    }
-
     Square endSquare;
 
     public Move(Square startSquare, Square endSquare) {
         this.startSquare = startSquare;
+        this.endSquare = endSquare;
+    }
+    public void setEndSquare(Square endSquare) {
         this.endSquare = endSquare;
     }
     /* metodo che controlla, data una mossa se è possibile, se lo è crea la mossa e la inserisce nell'array
