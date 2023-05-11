@@ -10,7 +10,7 @@ public abstract class Piece {
     private boolean captured = false;
     private Color color;
     private boolean hasMoved = false;
-    private boolean firstMove= false;
+    private boolean firstMove= true;
     private Coordinate position;
     protected ArrayList<Move> possibleMoves;
 
@@ -48,8 +48,8 @@ public abstract class Piece {
         this.color = color;
     }
 
-    public void setFirstMove(boolean firstMove) {
-        this.firstMove = firstMove;
+    public void setFirstMove() {
+        this.firstMove = false;
     }
     public void setPossibleMoves(ArrayList<Move> possibleMoves) {
         this.possibleMoves = possibleMoves;
@@ -58,8 +58,9 @@ public abstract class Piece {
         this.position = position;
     }
     public abstract void setPossibleMoves(final Board board);
-    public void setHasMoved(boolean hasMoved) {
-        this.hasMoved = hasMoved;
+    public void setHasMoved() {
+        this.hasMoved = true;
+        this.firstMove=false;
     }
     public void setCaptured() {
         captured = true;

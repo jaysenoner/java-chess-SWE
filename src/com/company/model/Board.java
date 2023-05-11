@@ -99,17 +99,23 @@ public class Board {
     public Square getSquare(Coordinate pos){
         return squares[pos.getRow()][pos.getCol()];
     }
-    public Square getSquare(int row, int col){return squares[row][col];};
+    public Square getSquare(int row, int col) {
+        Coordinate c = new Coordinate(row, col);
+        if (c.isValid()) {
+            return squares[row][col];
+        } else {
+            return null;
+        }
+    }
 
     public void updateBoard(Move move, Piece p){
-        move.startSquare.getPiece().setHasMoved(true);
-        move.startSquare.setPiece(null);
-        move.endSquare.setPiece(p);
+        move.getStartSquare().getPiece().setHasMoved();
+        move.getStartSquare().setPiece(null);
+        move.getEndSquare().setPiece(p);
     }
     public Square[][] getSquares(){
         return squares;
     }
-
     /* metodo che restituisce un array con tutte le mosse possibili che il pezzo può fare in diagonale, o per tutta la lunghezza
     della diagonale (alfiere), o solo per una casella in diagonale (re). se checkAllDiagonal è true controlla tutta la diagonale.
      */
@@ -123,12 +129,8 @@ public class Board {
         while (!stop) {
             i++;
             j++;
-            Move move= new Move(startSquare, squares[i][j]);
-            if(move.isValid()){
-                stop = move.checkMove(listOfMove);
-                if(!checkAllDiagonal){stop = true;}
-            }else{stop = true;}
-
+            Move move = new Move(startSquare, getSquare(i,j));
+            stop = move.checkMove(listOfMove, checkAllDiagonal);
         }
         stop = false;
         i = row;
@@ -136,11 +138,8 @@ public class Board {
         while (!stop) {
             i--;
             j--;
-            Move move= new Move(startSquare, squares[i][j]);
-            if(move.isValid()){
-                stop = move.checkMove(listOfMove);
-                if(!checkAllDiagonal){stop = true;}
-            }else{stop = true;}
+            Move move = new Move(startSquare, getSquare(i,j));
+            stop = move.checkMove(listOfMove, checkAllDiagonal);
         }
         stop = false;
         i = row;
@@ -148,11 +147,8 @@ public class Board {
         while (!stop) {
             i++;
             j--;
-            Move move= new Move(startSquare, squares[i][j]);
-            if(move.isValid()){
-                stop = move.checkMove(listOfMove);
-                if(!checkAllDiagonal){stop = true;}
-            }else{stop = true;}
+            Move move = new Move(startSquare, getSquare(i,j));
+            stop = move.checkMove(listOfMove, checkAllDiagonal);
         }
         stop = false;
         i = row;
@@ -160,11 +156,8 @@ public class Board {
         while (!stop) {
             i--;
             j++;
-            Move move= new Move(startSquare, squares[i][j]);
-            if(move.isValid()){
-                stop = move.checkMove(listOfMove);
-                if(!checkAllDiagonal){stop = true;}
-            }else{stop = true;}
+            Move move = new Move(startSquare, getSquare(i,j));
+            stop = move.checkMove(listOfMove, checkAllDiagonal);
         }
         return listOfMove;
     }
@@ -179,23 +172,17 @@ public class Board {
 
         boolean stop = false;
         int j = col;
-        while (!stop) {
+        while(!stop){
             j++;
-            Move move= new Move(startSquare, squares[row][j]);
-            if(move.isValid()){
-                stop = move.checkMove(listOfMove);
-                if(!checkAllRow){stop = true;}
-            }else{stop = true;}
+            Move move = new Move(startSquare, getSquare(row,j));
+            stop = move.checkMove(listOfMove, checkAllRow);
         }
         stop = false;
         j = col;
-        while (!stop && j < 8 && j >= 0) {
+        while (!stop) {
             j--;
-            Move move= new Move(startSquare, squares[row][j]);
-            if(move.isValid()){
-                stop = move.checkMove(listOfMove);
-                if(!checkAllRow){stop = true;}
-            }else{stop = true;}
+            Move move = new Move(startSquare, getSquare(row,j));
+            stop = move.checkMove(listOfMove, checkAllRow);
         }
         return listOfMove;
     }
@@ -211,21 +198,15 @@ public class Board {
         int col= startPosition.getRow();
         while (!stop) {
             i++;
-            Move move= new Move(startSquare, squares[i][col]);
-            if(move.isValid()){
-                stop = move.checkMove(listOfMove);
-                if(!checkAllCol){stop = true;}
-            }else{stop = true;}
+            Move move = new Move(startSquare, getSquare(i,col));
+            stop = move.checkMove(listOfMove, checkAllCol);
         }
         stop = false;
         i = startPosition.getRow();
         while (!stop) {
             i--;
-            Move move= new Move(startSquare, squares[i][col]);
-            if(move.isValid()){
-                stop = move.checkMove(listOfMove);
-                if(!checkAllCol){stop = true;}
-            }else{stop = true;}
+            Move move = new Move(startSquare, getSquare(i,col));
+            stop = move.checkMove(listOfMove, checkAllCol);
         }
         return listOfMove;
     }
