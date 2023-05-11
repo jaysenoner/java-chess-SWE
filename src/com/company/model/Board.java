@@ -5,16 +5,14 @@ import com.company.model.pieces.*;
 import java.util.ArrayList;
 
 public class Board {
-    int width =8;
-    int height =8;
-    boolean isFirstTurn;
-    Square[][] squares;
+    private boolean isFirstTurn;
+    public Square[][] squares;
 
 
     public Board() {
 
         this.isFirstTurn = true;
-        this.squares = new Square[height][width];
+        this.squares = new Square[8][8];
         int count = 0;
 
         //Assegno i colori alle case
@@ -171,10 +169,10 @@ public class Board {
         Square startSquare = getSquare(startPosition);
 
         boolean stop = false;
-        int i = row, j = col;
+        int j = col;
         while (!stop && j < 8 && j >= 0) {
             j++;
-            Move move= new Move(startSquare, squares[i][j]);
+            Move move= new Move(startSquare, squares[row][j]);
             stop = move.checkMove(listOfMove);
             if(!checkAllRow){stop = true;}
         }
@@ -182,7 +180,7 @@ public class Board {
         j = col;
         while (!stop && j < 8 && j >= 0) {
             j--;
-            Move move= new Move(startSquare, squares[i][j]);
+            Move move= new Move(startSquare, squares[row][j]);
             stop = move.checkMove(listOfMove);
             if(!checkAllRow){stop = true;}
         }
@@ -198,10 +196,10 @@ public class Board {
         Square startSquare = getSquare(startPosition);
 
         boolean stop = false;
-        int i = row, j = col;
+        int i = row;
         while (!stop && i < 8 && i >= 0) {
             i++;
-            Move move= new Move(startSquare, squares[i][j]);
+            Move move= new Move(startSquare, squares[i][col]);
             stop = move.checkMove(listOfMove);
             if(!checkAllCol){stop = true;}
         }
@@ -209,7 +207,7 @@ public class Board {
         i = row;
         while (!stop && i < 8 && i >= 0) {
             i--;
-            Move move= new Move(startSquare, squares[i][j]);
+            Move move= new Move(startSquare, squares[i][col]);
             stop = move.checkMove(listOfMove);
             if(!checkAllCol){stop = true;}
         }

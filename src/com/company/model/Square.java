@@ -5,8 +5,8 @@ import com.company.model.pieces.Piece;
 public class Square {
     Coordinate position;
     Boolean occupied = false;
-    Color color;
-    Piece piece;
+    public Color color;
+    public Piece piece;
 
     public Square(Coordinate position, Color color) {
         this.position = position;

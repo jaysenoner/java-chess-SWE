@@ -22,7 +22,6 @@ public class King extends Piece{
         isChecked = checked;
     }
 
-
     public King(Color color) {
         super(color);
     }
