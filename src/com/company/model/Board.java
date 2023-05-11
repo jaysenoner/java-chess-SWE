@@ -34,7 +34,7 @@ public class Board {
         //costruisco i vari pezzi nelle case di partenza
         for (int i = 2; i < 5; i++) {
             for (int j = 0; j < 8; j++) {
-                squares[i][j] = null;
+                squares[i][j].setPiece(null);
             }
         }
 
@@ -79,8 +79,8 @@ public class Board {
 
     public boolean removePiece(Coordinate c){
         if(getSquare(c).isOccupied()) {
-            getSquare(c).piece.setCaptured();
-            getSquare(c).piece = null;
+            getSquare(c).getPiece().setCaptured();
+            getSquare(c).setPiece(null);
             return true;
         }else {
             return false;
@@ -101,9 +101,9 @@ public class Board {
     }
 
     public void updateBoard(Move move, Piece p){
-        move.startSquare.piece.setHasMoved(true);
-        move.startSquare.piece= null;
-        move.endSquare.piece = p;
+        move.startSquare.getPiece().setHasMoved(true);
+        move.startSquare.setPiece(null);
+        move.endSquare.setPiece(p);
     }
     public Square[][] getSquares(){
         return squares;

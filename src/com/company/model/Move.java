@@ -30,33 +30,17 @@ public class Move {
         return stop;
     }
     public boolean isFree(){
-        if(!startSquare.isOccupied()){
-            return true;
-        }else{
-            return false;
-        }
+        return !startSquare.isOccupied();
     }
     public boolean isThereAnEnemy(){
-        if(startSquare.isOccupied() && startSquare.piece.getColor()!= endSquare.piece.getColor()){
-            return true;
-        }else{
-            return false;
-        }
+        return startSquare.isOccupied() && startSquare.getPiece().getColor() != endSquare.getPiece().getColor();
     }
     public boolean isThereMyPiece(){
-        if(startSquare.isOccupied() && startSquare.piece.getColor()== endSquare.piece.getColor()){
-            return true;
-        }else{
-            return false;
-        }
+        return startSquare.isOccupied() && startSquare.getPiece().getColor() == endSquare.getPiece().getColor();
     }
 
     public boolean isValid(){
-        if(startSquare.getPosition().isValid() && endSquare.getPosition().isValid()){
-            return true;
-        }else{
-            return false;
-        }
+        return startSquare.getPosition().isValid() && endSquare.getPosition().isValid();
     }
 
 }
