@@ -19,16 +19,44 @@ public class Move {
     che gli passiamo e restituisce un bolleano che ci indica se è possibile proseguire in quella direzione*/
     public boolean checkMove(ArrayList<Move> listOfMove){
         boolean stop= false;
-        Color c= startSquare.getPiece().getColor();
-        if (endSquare.isOccupied() && endSquare.getPiece().getColor() == c) {
+        if (isThereMyPiece()) {
             stop = true;
-        } else if (endSquare.isOccupied() && endSquare.getPiece().getColor() != c) {
+        } else if (isThereAnEnemy()) {
             listOfMove.add(this);
             stop = true;
         } else {
             listOfMove.add(this);
         }
         return stop;
+    }
+    public boolean isFree(){
+        if(!startSquare.isOccupied()){
+            return true;
+        }else{
+            return false;
+        }
+    }
+    public boolean isThereAnEnemy(){
+        if(startSquare.isOccupied() && startSquare.piece.getColor()!= endSquare.piece.getColor()){
+            return true;
+        }else{
+            return false;
+        }
+    }
+    public boolean isThereMyPiece(){
+        if(startSquare.isOccupied() && startSquare.piece.getColor()== endSquare.piece.getColor()){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    public boolean isValid(){
+        if(startSquare.getPosition().isValid() && endSquare.getPosition().isValid()){
+            return true;
+        }else{
+            return false;
+        }
     }
 
 }

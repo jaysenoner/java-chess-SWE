@@ -36,7 +36,7 @@ public class Board {
         //costruisco i vari pezzi nelle case di partenza
         for (int i = 2; i < 5; i++) {
             for (int j = 0; j < 8; j++) {
-                squares[i][j] = null;
+                squares[i][j].piece = null;
             }
         }
 
@@ -101,6 +101,7 @@ public class Board {
     public Square getSquare(Coordinate pos){
         return squares[pos.getRow()][pos.getCol()];
     }
+    public Square getSquare(int row, int col){return squares[row][col];};
 
     public void updateBoard(Move move, Piece p){
         move.startSquare.piece.setHasMoved(true);
@@ -119,45 +120,53 @@ public class Board {
          int col = startPosition.getCol();
          int row = startPosition.getRow();
          Square startSquare = getSquare(startPosition);
-
          boolean stop = false;
          int i = row, j = col;
-         while (!stop && i < 8 && i >= 0 && j < 8 && j >= 0) {
+         while (!stop) {
              i++;
              j++;
              Move move= new Move(startSquare, squares[i][j]);
-             stop = move.checkMove(listOfMove);
-             if(!checkAllDiagonal){stop = true;}
+             if(move.isValid()){
+                 stop = move.checkMove(listOfMove);
+                 if(!checkAllDiagonal){stop = true;}
+             }else{stop = true;}
+
          }
          stop = false;
          i = row;
          j = col;
-         while (!stop && i < 8 && i >= 0 && j < 8 && j >= 0) {
+         while (!stop) {
              i--;
              j--;
              Move move= new Move(startSquare, squares[i][j]);
-             stop = move.checkMove(listOfMove);
-             if(!checkAllDiagonal){stop = true;}
+             if(move.isValid()){
+                 stop = move.checkMove(listOfMove);
+                 if(!checkAllDiagonal){stop = true;}
+             }else{stop = true;}
          }
          stop = false;
          i = row;
          j = col;
-         while (!stop && i < 8 && i >= 0 && j < 8 && j >= 0) {
+         while (!stop) {
              i++;
              j--;
              Move move= new Move(startSquare, squares[i][j]);
-             stop = move.checkMove(listOfMove);
-             if(!checkAllDiagonal){stop = true;}
+             if(move.isValid()){
+                 stop = move.checkMove(listOfMove);
+                 if(!checkAllDiagonal){stop = true;}
+             }else{stop = true;}
          }
          stop = false;
          i = row;
          j = col;
-         while (!stop && i < 8 && i >= 0 && j < 8 && j >= 0) {
+         while (!stop) {
              i--;
              j++;
              Move move= new Move(startSquare, squares[i][j]);
-             stop = move.checkMove(listOfMove);
-             if(!checkAllDiagonal){stop = true;}
+             if(move.isValid()){
+                 stop = move.checkMove(listOfMove);
+                 if(!checkAllDiagonal){stop = true;}
+             }else{stop = true;}
          }
          return listOfMove;
      }
@@ -171,20 +180,24 @@ public class Board {
         Square startSquare = getSquare(startPosition);
 
         boolean stop = false;
-        int i = row, j = col;
-        while (!stop && j < 8 && j >= 0) {
+        int j = col;
+        while (!stop) {
             j++;
-            Move move= new Move(startSquare, squares[i][j]);
-            stop = move.checkMove(listOfMove);
-            if(!checkAllRow){stop = true;}
+            Move move= new Move(startSquare, squares[row][j]);
+            if(move.isValid()){
+                stop = move.checkMove(listOfMove);
+                if(!checkAllRow){stop = true;}
+            }else{stop = true;}
         }
         stop = false;
         j = col;
         while (!stop && j < 8 && j >= 0) {
             j--;
-            Move move= new Move(startSquare, squares[i][j]);
-            stop = move.checkMove(listOfMove);
-            if(!checkAllRow){stop = true;}
+            Move move= new Move(startSquare, squares[row][j]);
+            if(move.isValid()){
+                stop = move.checkMove(listOfMove);
+                if(!checkAllRow){stop = true;}
+            }else{stop = true;}
         }
         return listOfMove;
     }
@@ -193,108 +206,119 @@ public class Board {
     tutta la colonna.*/
     public ArrayList<Move> verticalMoves(Coordinate startPosition, boolean checkAllCol){
         ArrayList<Move> listOfMove= new ArrayList<>();
-        int col = startPosition.getCol();
-        int row = startPosition.getRow();
         Square startSquare = getSquare(startPosition);
 
         boolean stop = false;
-        int i = row, j = col;
-        while (!stop && i < 8 && i >= 0) {
+        int i = startPosition.getRow();
+        int col= startPosition.getRow();
+        while (!stop) {
             i++;
-            Move move= new Move(startSquare, squares[i][j]);
-            stop = move.checkMove(listOfMove);
-            if(!checkAllCol){stop = true;}
+            Move move= new Move(startSquare, squares[i][col]);
+            if(move.isValid()){
+                stop = move.checkMove(listOfMove);
+                if(!checkAllCol){stop = true;}
+            }else{stop = true;}
         }
         stop = false;
-        i = row;
-        while (!stop && i < 8 && i >= 0) {
+        i = startPosition.getRow();
+        while (!stop) {
             i--;
-            Move move= new Move(startSquare, squares[i][j]);
-            stop = move.checkMove(listOfMove);
-            if(!checkAllCol){stop = true;}
+            Move move= new Move(startSquare, squares[i][col]);
+            if(move.isValid()){
+                stop = move.checkMove(listOfMove);
+                if(!checkAllCol){stop = true;}
+            }else{stop = true;}
         }
         return listOfMove;
     }
-    /* metodo che restituisce un array con tutte le mosse possibili che il pezzo può fare in orizzontale,
-    o per tutta la lunghezza della riga (torre), o solo per una casella (re). se allMoves è true controlla
-    tutta la diagonale.*/
+    /* metodo che restituisce un array con tutte le mosse possibili che il pedono può fare data la sua posizione iniziale.
+    * TODO:aggiungere anpassant*/
     public ArrayList<Move> pawnMovement(Coordinate startPosition){
         ArrayList<Move> listOfMove= new ArrayList<>();
         int col = startPosition.getCol();
         int row = startPosition.getRow();
         Square startSquare = getSquare(startPosition);
+        //controllo delle mosse in diagonale se sono occupate da un nemico e posso mangiare (solo in avanti),
+        //della singola mossa avanti e se sono al primo spostamento anche del doppio spostamento
         if (startSquare.getPiece().getColor() == Color.WHITE){
-            if(row >0 && col >0) {
-                if (squares[row - 1][col - 1].isOccupied() && squares[row - 1][col - 1].getPiece().getColor() == Color.BLACK) {
-                    listOfMove.add(new Move(startSquare, squares[row - 1][col - 1]));
-                }
+            //controllo mosse per mangiare
+            Move move=new Move(startSquare,getSquare(row-1,col-1));
+            if (move.isValid() && move.isThereAnEnemy()) {
+                listOfMove.add(move);
             }
-            if(row >0 && col <7) {
-                if (squares[row - 1][col + 1].isOccupied() && squares[row - 1][col + 1].getPiece().getColor() == Color.BLACK) {
-                    listOfMove.add(new Move(startSquare, squares[row - 1][col + 1]));
+            move.setEndSquare(getSquare(row-1, col+1));
+            if (move.isValid() && move.isThereAnEnemy()) {
+                listOfMove.add(move);
+            }
+            //contollo mosse in avanti
+            Move move1=new Move(startSquare,getSquare(row-1,col));
+            if(move1.isValid() && move1.isFree()){
+                listOfMove.add(move1);
+                Move move2=new Move(startSquare,getSquare(row-2,col));
+                if(startSquare.piece.isFirstMove() && move2.isValid() && move2.isFree()){
+                    listOfMove.add(move2);
                 }
             }
         }else {
-            if (row < 7 && col > 0) {
-                if (squares[row + 1][col - 1].isOccupied() && squares[row + 1][col - 1].getPiece().getColor() == Color.WHITE) {
-                    listOfMove.add(new Move(startSquare, squares[row + 1][col - 1]));
+            //controllo mosse per mangiare
+            Move move=new Move(startSquare,getSquare(row+1,col-1));
+            if (move.isValid() && move.isThereAnEnemy()) {
+                listOfMove.add(move);
+            }
+            move.setEndSquare(getSquare(row+1, col+1));
+            if (move.isValid() && move.isThereAnEnemy()) {
+                listOfMove.add(move);
+            }
+            //controllo mosse in avanti
+            Move move1=new Move(startSquare,getSquare(row+1,col));
+            if(move1.isValid() && move1.isFree()){
+                listOfMove.add(move1);
+                Move move2=new Move(startSquare,getSquare(row+2,col));
+                if(startSquare.piece.isFirstMove() && move2.isValid() && move2.isFree()){
+                    listOfMove.add(move2);
                 }
             }
-            if (row < 7 && col < 7) {
-                if (squares[row + 1][col + 1].isOccupied() && squares[row + 1][col + 1].getPiece().getColor() == Color.WHITE) {
-                    listOfMove.add(new Move(startSquare, squares[row + 1][col + 1]));
-                }
-            }
         }
-        if(squares[row][col].getPiece().isFirstMove()  && !squares[row +1][col].isOccupied() && !squares[row +2][col].isOccupied() ){
-            listOfMove.add(new Move(startSquare, squares[row +2][col]));
-        }
-        if(!squares[row +1][col].isOccupied()){
-            listOfMove.add(new Move(startSquare, squares[row +1][col]));
-        }
+
         return listOfMove;
     }
-    //TODO: completare! manca controllare se posizione occupata da ns pezzo, mancano dei movimenti
     public ArrayList<Move> knightMovement(Coordinate startPosition){
         ArrayList<Move> listOfMove = new ArrayList<>();
-        Coordinate c = new Coordinate(startPosition.getRow() +1, startPosition.getCol() +2);
-        if (c.isValid()){
-            listOfMove.add(new Move(getSquare(startPosition),getSquare(c) ));
+        Square startSquare = getSquare(startPosition);
+        int row= startPosition.getRow();
+        int col = startPosition.getCol();
+
+        Move move= new Move(startSquare,getSquare(row +1, col +2));
+        if (move.isValid() && !move.isThereMyPiece()){
+            listOfMove.add(move);
         }
-        c.setRow(startPosition.getRow() +2);
-        c.setCol(startPosition.getCol() +1);
-        if (c.isValid()){
-            listOfMove.add(new Move(getSquare(startPosition),getSquare(c) ));
+        move.setEndSquare(getSquare(row+2, col+1));
+        if (move.isValid() && !move.isThereMyPiece()){
+            listOfMove.add(move);
         }
-        c.setRow(startPosition.getRow() -2);
-        c.setCol(startPosition.getCol() -1);
-        if (c.isValid()){
-            listOfMove.add(new Move(getSquare(startPosition),getSquare(c) ));
+        move.setEndSquare(getSquare(row-2, col-1));
+        if (move.isValid() && !move.isThereMyPiece()){
+            listOfMove.add(move);
         }
-        c.setRow(startPosition.getRow() -1);
-        c.setCol(startPosition.getCol() -2);
-        if (c.isValid()){
-            listOfMove.add(new Move(getSquare(startPosition),getSquare(c) ));
+        move.setEndSquare(getSquare(row-1, col-2));
+        if (move.isValid() && !move.isThereMyPiece()){
+            listOfMove.add(move);
         }
-        c.setRow(startPosition.getRow() -2);
-        c.setCol(startPosition.getCol() +1);
-        if (c.isValid()){
-            listOfMove.add(new Move(getSquare(startPosition),getSquare(c) ));
+        move.setEndSquare(getSquare(row-2, col+1));
+        if (move.isValid() && !move.isThereMyPiece()){
+            listOfMove.add(move);
         }
-        c.setRow(startPosition.getRow() -1);
-        c.setCol(startPosition.getCol() +2);
-        if (c.isValid()){
-            listOfMove.add(new Move(getSquare(startPosition),getSquare(c) ));
+        move.setEndSquare(getSquare(row-1, col+2));
+        if (move.isValid() && !move.isThereMyPiece()){
+            listOfMove.add(move);
         }
-        c.setRow(startPosition.getRow() +2);
-        c.setCol(startPosition.getCol() -1);
-        if (c.isValid()){
-            listOfMove.add(new Move(getSquare(startPosition),getSquare(c) ));
+        move.setEndSquare(getSquare(row+2, col-1));
+        if (move.isValid() && !move.isThereMyPiece()){
+            listOfMove.add(move);
         }
-        c.setRow(startPosition.getRow() +1);
-        c.setCol(startPosition.getCol() -2);
-        if (c.isValid()){
-            listOfMove.add(new Move(getSquare(startPosition),getSquare(c) ));
+        move.setEndSquare(getSquare(row+1, col-2));
+        if (move.isValid() && !move.isThereMyPiece()){
+            listOfMove.add(move);
         }
         return listOfMove;
     }
