@@ -29,6 +29,7 @@ public class King extends Piece{
     @Override
     public void setPossibleMoves(final Board board) {
         Coordinate startPosition = getPosition();
+        possibleMoves.clear();
         //mosse diagonali
         possibleMoves.addAll(board.diagonalMoves(startPosition, false));
         //mosse in orizzontale

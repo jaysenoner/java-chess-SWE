@@ -17,15 +17,10 @@ public class Rook extends Piece{
     @Override
     public void setPossibleMoves(final Board board) {
         Coordinate startPosition = getPosition();
+        possibleMoves.clear();
         //mosse in orizzontale
-        ArrayList<Move> listOfMoves = board.horizontalMoves(startPosition, true);
-        for (Move move :listOfMoves ){
-            getPossibleMoves().add(move);
-        }
+        possibleMoves.addAll(board.horizontalMoves(startPosition, true));
         //mosse verticali
-        listOfMoves = board.verticalMoves(startPosition, true);
-        for (Move move :listOfMoves ){
-            getPossibleMoves().add(move);
-        }
+        possibleMoves.addAll(board.verticalMoves(startPosition, true));
     }
 }

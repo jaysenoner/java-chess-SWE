@@ -12,10 +12,10 @@ public class Move {
     private Square endSquare;
 
     public Move(Square startSquare, Square endSquare) {
-        if(startSquare != null && endSquare != null && startSquare.getPosition().isValid() && endSquare.getPosition().isValid()) {
-            this.startSquare = startSquare;
+        if(startSquare != null  && startSquare.getPosition().isValid()) {
             this.endSquare = endSquare;
         }
+        this.startSquare = startSquare;
     }
     public void setEndSquare(Square endSquare) {
         this.endSquare = endSquare;
@@ -51,7 +51,7 @@ public class Move {
     }
 
     public boolean isValid(){
-        return startSquare != null && endSquare!= null && startSquare.getPosition().isValid() && endSquare.getPosition().isValid() ;
+        return (startSquare != null && endSquare!= null && startSquare.getPosition().isValid() && endSquare.getPosition().isValid()) ;
     }
 
 }

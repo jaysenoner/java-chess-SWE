@@ -14,6 +14,7 @@ public class Knight extends Piece{
     @Override
     public void setPossibleMoves(final Board board) {
         Coordinate startPosition = getPosition();
+        possibleMoves.clear();
         possibleMoves.addAll(board.knightMovement(startPosition));
     }
 }

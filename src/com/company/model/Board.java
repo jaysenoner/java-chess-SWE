@@ -225,7 +225,7 @@ public class Board {
             if (move.isValid() && move.isThereAnEnemy()) {
                 listOfMove.add(move);
             }
-            move.setEndSquare(getSquare(row-1, col+1));
+            move=new Move(startSquare,getSquare(row-1,col+1));
             if (move.isValid() && move.isThereAnEnemy()) {
                 listOfMove.add(move);
             }
@@ -244,7 +244,7 @@ public class Board {
             if (move.isValid() && move.isThereAnEnemy()) {
                 listOfMove.add(move);
             }
-            move.setEndSquare(getSquare(row+1, col+1));
+            move=new Move(startSquare,getSquare(row+1,col+1));
             if (move.isValid() && move.isThereAnEnemy()) {
                 listOfMove.add(move);
             }
@@ -271,31 +271,31 @@ public class Board {
         if (move.isValid() && !move.isThereMyPiece()){
             listOfMove.add(move);
         }
-        move.setEndSquare(getSquare(row+2, col+1));
+        move= new Move(startSquare,getSquare(row +2, col +1));
         if (move.isValid() && !move.isThereMyPiece()){
             listOfMove.add(move);
         }
-        move.setEndSquare(getSquare(row-2, col-1));
+        move= new Move(startSquare,getSquare(row -2, col -1));
         if (move.isValid() && !move.isThereMyPiece()){
             listOfMove.add(move);
         }
-        move.setEndSquare(getSquare(row-1, col-2));
+        move= new Move(startSquare,getSquare(row -1, col -2));
         if (move.isValid() && !move.isThereMyPiece()){
             listOfMove.add(move);
         }
-        move.setEndSquare(getSquare(row-2, col+1));
+        move= new Move(startSquare,getSquare(row -2, col +1));
         if (move.isValid() && !move.isThereMyPiece()){
             listOfMove.add(move);
         }
-        move.setEndSquare(getSquare(row-1, col+2));
+        move= new Move(startSquare,getSquare(row -1, col +2));
         if (move.isValid() && !move.isThereMyPiece()){
             listOfMove.add(move);
         }
-        move.setEndSquare(getSquare(row+2, col-1));
+        move= new Move(startSquare,getSquare(row +2, col -1));
         if (move.isValid() && !move.isThereMyPiece()){
             listOfMove.add(move);
         }
-        move.setEndSquare(getSquare(row+1, col-2));
+        move= new Move(startSquare,getSquare(row +1, col -2));
         if (move.isValid() && !move.isThereMyPiece()){
             listOfMove.add(move);
         }

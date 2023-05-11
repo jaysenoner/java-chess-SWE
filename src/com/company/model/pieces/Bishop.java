@@ -16,6 +16,7 @@ public class Bishop extends Piece {
     @Override
     public void setPossibleMoves(final Board board) {
         Coordinate startPosition = getPosition();
+        possibleMoves.clear();
         possibleMoves.addAll(board.diagonalMoves(startPosition, true));
     }
 }
