@@ -13,11 +13,11 @@ public class Main {
         Board board = new Board();
         for(Square[] square:board.getSquares()) {
             for (Square s : square) {
-                if(s.piece == null){
+                if(s.getPiece() == null){
                     System.out.println("");
                 }else {
-                    s.piece.setPossibleMoves(board);
-                    System.out.println(s.piece.getPossibleMoves());
+                    s.getPiece().setPossibleMoves(board);
+                    System.out.println(s.getPiece().getPossibleMoves());
                 }
             }
         }
