@@ -18,7 +18,7 @@ class BoardTest {
 
     @BeforeEach
     void setUp() {
-        b = new Board();
+        b = new Board(false);
 
     }
 
@@ -161,7 +161,7 @@ class BoardTest {
 
     @Test
     void pawnMovement() {
-        //verifico che prenda come possibili mosse il magiare il pedone avversario e l'avanzata
+        //verifico che prenda come possibili mosse il mangiare il pedone avversario e l'avanzata
         // di una posizione o di due
         b.squares[2][5].setPiece(new Pawn(Color.WHITE));
         b.squares[2][3].setPiece(new Pawn(Color.BLACK));
@@ -197,7 +197,7 @@ class BoardTest {
         pawn = new Pawn(Color.WHITE);
         b.squares[5][6].setPiece(pawn);
         knight.setPossibleMoves(b);
-        listOfMove= new ArrayList<>();
+        listOfMove= new ArrayList<>(); //TODO: occhio
         listOfMove= knight.getPossibleMoves();
         assertNotEquals(listOfMove.get(0).getEndSquare().getPosition(),b.squares[5][6].getPosition());
 

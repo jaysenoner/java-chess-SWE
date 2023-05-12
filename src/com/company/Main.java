@@ -1,10 +1,7 @@
 package com.company;
 
 
-import com.company.model.Board;
-import com.company.model.Color;
-import com.company.model.Move;
-import com.company.model.Square;
+import com.company.model.*;
 import com.company.model.pieces.Rook;
 
 import java.util.ArrayList;
@@ -22,15 +19,17 @@ public class Main {
                     System.out.println(s.getPiece() + "" + s.getPiece().getPossibleMoves());
                 }
             }
-        }*/
-        Board b= new Board();
+        }
+        Board b= new Board(false);
         Rook rook=new Rook(Color.BLACK);
         b.squares[4][4].setPiece(rook);
         rook.setPossibleMoves(b);
         ArrayList<Move> listOfMove= rook.getPossibleMoves();
         for(Move m:listOfMove){
             System.out.println(m.getEndSquare().getPosition().getRow() +" "+ m.getEndSquare().getPosition().getCol());
-        }
+        }*/
+
+
 
     }
 }

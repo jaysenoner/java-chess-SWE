@@ -7,7 +7,7 @@ public class Move {
         return startSquare;
     }
 
-    private Square startSquare;
+    private final Square startSquare;
 
     private Square endSquare;
 
@@ -26,9 +26,9 @@ public class Move {
     public boolean checkMove(ArrayList<Move> listOfMove, boolean checkAll){
         boolean stop= false;
         if(isValid()) {
-            if (isThereMyPiece()) {
+            if (isOccupiedByAllyPiece()) {
                 stop = true;
-            } else if (isThereAnEnemy()) {
+            } else if (isOccupiedByEnemyPiece()) {
                 listOfMove.add(this);
                 stop = true;
             } else {
@@ -43,10 +43,10 @@ public class Move {
     public boolean isFree(){
         return !endSquare.isOccupied();
     }
-    public boolean isThereAnEnemy(){
+    public boolean isOccupiedByEnemyPiece(){
         return endSquare.isOccupied()&& startSquare.getPiece().getColor() != endSquare.getPiece().getColor();
     }
-    public boolean isThereMyPiece(){
+    public boolean isOccupiedByAllyPiece(){
         return endSquare.isOccupied() && startSquare.getPiece().getColor() == endSquare.getPiece().getColor();
     }
 
