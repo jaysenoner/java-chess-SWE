@@ -13,11 +13,20 @@ public class Coordinate {
         this.col = col;
     }
 
+    public static String[] getLetters() {
+        return letters;
+    }
+
+    public static String[] getNumbers() {
+        return numbers;
+    }
+
     public Coordinate(String letter, String number){
         if(Arrays.asList(letters).contains(letter) && Arrays.asList(numbers).contains(number)){
             this.row = Arrays.asList(numbers).indexOf(number);
             this.col = Arrays.asList(letters).indexOf(letter);
         }
+        else throw new IllegalArgumentException();
     }
 
     public int getRow() {
