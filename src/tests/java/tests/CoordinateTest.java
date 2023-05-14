@@ -41,7 +41,7 @@ class CoordinateTest {
             assertEquals(position2.getCol(), 2);
 
             try{
-                position2 = new Coordinate("k","23");
+                new Coordinate("k","23");
             }catch(IllegalArgumentException e)
             {
                 assertEquals(e.getClass(), IllegalArgumentException.class);

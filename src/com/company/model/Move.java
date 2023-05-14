@@ -21,6 +21,7 @@ public class Move {
         this.endSquare = endSquare;
     }
     public Square getEndSquare(){return endSquare;}
+
     /* metodo che controlla, data una mossa se è possibile, se lo è crea la mossa e la inserisce nell'array
     che gli passiamo e restituisce un bolleano che ci indica se è possibile proseguire in quella direzione*/
     public boolean checkMove(ArrayList<Move> listOfMove, boolean checkAll){
@@ -43,6 +44,7 @@ public class Move {
     public boolean isFree(){
         return !endSquare.isOccupied();
     }
+
     public boolean isOccupiedByEnemyPiece(){
         return endSquare.isOccupied()&& startSquare.getPiece().getColor() != endSquare.getPiece().getColor();
     }
