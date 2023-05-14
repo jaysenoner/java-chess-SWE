@@ -5,6 +5,8 @@ import com.company.model.Board;
 import com.company.model.Color;
 import com.company.model.Coordinate;
 import com.company.model.Move;
+import com.company.model.movement.HorizontalMovement;
+import com.company.model.movement.VerticalMovement;
 
 import java.util.ArrayList;
 
@@ -12,15 +14,8 @@ public class Rook extends Piece{
 
     public Rook(Color color) {
         super(color);
+        listOfMovementRules.add(new HorizontalMovement(true));
+        listOfMovementRules.add(new VerticalMovement(true));
     }
 
-    @Override
-    public void setPossibleMoves(final Board board) {
-        Coordinate startPosition = getPosition();
-        possibleMoves.clear();
-        //mosse in orizzontale
-        possibleMoves.addAll(board.horizontalMoves(startPosition, true));
-        //mosse verticali
-        possibleMoves.addAll(board.verticalMoves(startPosition, true));
-    }
 }

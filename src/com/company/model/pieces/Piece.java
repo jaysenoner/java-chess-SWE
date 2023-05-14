@@ -1,10 +1,9 @@
 package com.company.model.pieces;
 
-import com.company.model.Board;
-import com.company.model.Coordinate;
-import com.company.model.Move;
+import com.company.model.*;
+import com.company.model.movement.Movement;
+
 import java.util.ArrayList;
-import com.company.model.Color;
 
 public abstract class Piece {
     private boolean captured = false;
@@ -12,18 +11,20 @@ public abstract class Piece {
     private boolean hasMoved = false;
     private boolean firstMove= true;
     private Coordinate position;
+    protected ArrayList<Movement> listOfMovementRules;
     protected ArrayList<Move> possibleMoves;
 
     public Piece(Color color) {
         this.color= color;
         possibleMoves= new ArrayList<>();
+        listOfMovementRules = new ArrayList<>();
 
     }
 
     public boolean isCaptured() {
         return captured;
     }
-    public boolean isHasMoved() {
+    public boolean HasMoved() {
         return hasMoved;
     }
 
@@ -57,10 +58,21 @@ public abstract class Piece {
     public void setPosition(Coordinate position) {
         this.position = position;
     }
-    public abstract void setPossibleMoves(final Board board);
+
+    //Metodo che itera sulla lista delle regole di movimento e per ognuna di esse genera una lista di mosse POSSIBILI(no controllo legalità es scacchi ecc)
+    public void setPossibleMoves(final Board board){
+        Coordinate startPosition = getPosition();
+        possibleMoves.clear();
+        for(Movement movementRule: listOfMovementRules)
+            possibleMoves.addAll(movementRule.getMovesFromMovementRule(startPosition, board));
+
+
+    };
+
+
     public void setHasMoved() {
         this.hasMoved = true;
-        this.firstMove=false;
+        this.firstMove = false;
     }
     public void setCaptured() {
         captured = true;
