@@ -1,5 +1,4 @@
 package com.company.model;
-
 import java.util.Arrays;
 
 public class Coordinate {

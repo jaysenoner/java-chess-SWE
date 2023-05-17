@@ -25,7 +25,6 @@ class CoordinateTest {
                 pos.setCol(i);
                 assertEquals(
                         Coordinate.getLetters()[i] + (8 - j), pos.fromIndexToChessNotation() );
-
             }
         }
     }

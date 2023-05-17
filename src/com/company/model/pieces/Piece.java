@@ -78,7 +78,6 @@ public abstract class Piece {
         captured = true;
     }
 
-    //TODO: TESTARE setPossibleMoves()
 }
 
 

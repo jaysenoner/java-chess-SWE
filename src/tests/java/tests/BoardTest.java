@@ -136,7 +136,8 @@ class BoardTest {
 
     @Test
     void horizontalMoves() {
-        //metto una torre in mezzo alla scacchiera e controllo che tutte le possibili mosse orizzontali siano giuste
+        //metto una torre in mezzo alla scacchiera e controllo che tutte le possibili
+        // mosse orizzontali siano giuste
         Rook rook=new Rook(Color.BLACK);
         b.squares[4][4].setPiece(rook);
         rook.setPossibleMoves(b);
