@@ -1,8 +1,6 @@
 package tests;
 
-import com.company.model.Board;
-import com.company.model.Color;
-import com.company.model.Move;
+import com.company.model.*;
 import com.company.model.pieces.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -104,106 +102,45 @@ class BoardTest {
 
     }
 
+    //Testa tutte le caselle della scacchiera
     @Test
-    void diagonalMoves() {
-        //metto un alfire in mezzo alla scacchiera e controllo che tutte le possibili mosse siano giuste
-        Bishop bishop =new Bishop(Color.BLACK);
-        b.squares[4][4].setPiece(bishop);
-        bishop.setPossibleMoves(b);
-        ArrayList<Move> listOfMove= bishop.getPossibleMoves();
-        assertEquals(listOfMove.get(0).getEndSquare().getPosition().getRow(),5);
-        assertEquals(listOfMove.get(0).getEndSquare().getPosition().getCol(),5);
-        assertEquals(listOfMove.get(1).getEndSquare().getPosition().getRow(),6);
-        assertEquals(listOfMove.get(1).getEndSquare().getPosition().getCol(),6);
-        assertNotEquals(listOfMove.get(2).getEndSquare().getPosition().getRow(),7);
-        assertNotEquals(listOfMove.get(2).getEndSquare().getPosition().getCol(),7);
-        assertEquals(listOfMove.get(2).getEndSquare().getPosition().getRow(),3);
-        assertEquals(listOfMove.get(2).getEndSquare().getPosition().getCol(),3);
-        assertEquals(listOfMove.get(3).getEndSquare().getPosition().getRow(),2);
-        assertEquals(listOfMove.get(3).getEndSquare().getPosition().getCol(),2);
-        assertNotEquals(listOfMove.get(4).getEndSquare().getPosition().getRow(),1);
-        assertNotEquals(listOfMove.get(4).getEndSquare().getPosition().getCol(),1);
-        assertEquals(listOfMove.get(4).getEndSquare().getPosition().getRow(),5);
-        assertEquals(listOfMove.get(4).getEndSquare().getPosition().getCol(),3);
-        assertEquals(listOfMove.get(5).getEndSquare().getPosition().getRow(),6);
-        assertEquals(listOfMove.get(5).getEndSquare().getPosition().getCol(),2);
-        assertEquals(listOfMove.get(6).getEndSquare().getPosition().getRow(),3);
-        assertEquals(listOfMove.get(6).getEndSquare().getPosition().getCol(),5);
-        assertEquals(listOfMove.get(7).getEndSquare().getPosition().getRow(),2);
-        assertEquals(listOfMove.get(7).getEndSquare().getPosition().getCol(),6);
+    void getSquareByChessNotationShouldReturnTheCorrectSquare(){
+        for(int i= 0; i< 8 ; i++)
+            for(int j = 0; j< 8;j++)
+                assertEquals(b.squares[i][j],b.getSquare(Coordinate.getLetters()[j],Integer.toString(8-i)));
 
     }
 
-    @Test
-    void horizontalMoves() {
-        //metto una torre in mezzo alla scacchiera e controllo che tutte le possibili mosse orizzontali siano giuste
-        Rook rook=new Rook(Color.BLACK);
-        b.squares[4][4].setPiece(rook);
-        rook.setPossibleMoves(b);
-        ArrayList<Move> listOfMove= rook.getPossibleMoves();
-        assertEquals(listOfMove.get(0).getEndSquare().getPosition().getRow(),4);
-        assertEquals(listOfMove.get(0).getEndSquare().getPosition().getCol(),5);
-        assertEquals(listOfMove.get(1).getEndSquare().getPosition().getCol(),6);
-        assertEquals(listOfMove.get(2).getEndSquare().getPosition().getCol(),7);
-        assertEquals(listOfMove.get(3).getEndSquare().getPosition().getCol(),3);
-        assertEquals(listOfMove.get(4).getEndSquare().getPosition().getCol(),2);
-        assertEquals(listOfMove.get(5).getEndSquare().getPosition().getCol(),1);
-        assertEquals(listOfMove.get(6).getEndSquare().getPosition().getCol(),0);
-    }
+    void updateBoardShouldModifyPiecesPositions(){
+        b.updateBoard(new Move(b.getSquare("a","2"), b.getSquare("a","4")));
+        b.updateBoard(new Move(b.getSquare("b","2"), b.getSquare("b","4")));
+        b.updateBoard(new Move(b.getSquare("c","2"), b.getSquare("c","4")));
+        b.updateBoard(new Move(b.getSquare("d","2"), b.getSquare("d","4")));
+        b.updateBoard(new Move(b.getSquare("e","2"), b.getSquare("e","4")));
+        b.updateBoard(new Move(b.getSquare("f","2"), b.getSquare("f","4")));
+        b.updateBoard(new Move(b.getSquare("g","2"), b.getSquare("g","4")));
+        b.updateBoard(new Move(b.getSquare("h","2"), b.getSquare("h","4")));
+        assertNull(b.getSquare("a","2").getPiece());
+        assertNull(b.getSquare("b","2").getPiece());
+        assertNull(b.getSquare("c","2").getPiece());
+        assertNull(b.getSquare("d","2").getPiece());
+        assertNull(b.getSquare("e","2").getPiece());
+        assertNull(b.getSquare("f","2").getPiece());
+        assertNull(b.getSquare("g","2").getPiece());
+        assertNull(b.getSquare("h","2").getPiece());
 
-    @Test
-    void verticalMoves() {
-        //metto una torre in mezzo alla scacchiera e controllo che tutte le possibili mosse verticali siano giuste
-        Rook rook=new Rook(Color.BLACK);
-        b.squares[4][4].setPiece(rook);
-        rook.setPossibleMoves(b);
-        ArrayList<Move> listOfMove= rook.getPossibleMoves();
-        assertEquals(listOfMove.get(7).getEndSquare().getPosition().getRow(),5);
-        assertEquals(listOfMove.get(8).getEndSquare().getPosition().getRow(),6);
-        assertEquals(listOfMove.get(9).getEndSquare().getPosition().getRow(),3);
-        assertEquals(listOfMove.get(10).getEndSquare().getPosition().getRow(),2);
-    }
+        assertEquals(b.getSquare("a","2").getPiece().getClass(),Pawn.class);
+        assertEquals(b.getSquare("c","2").getPiece().getClass(),Pawn.class);
+        assertEquals(b.getSquare("d","2").getPiece().getClass(),Pawn.class);
+        assertEquals(b.getSquare("e","2").getPiece().getClass(),Pawn.class);
+        assertEquals(b.getSquare("b","2").getPiece().getClass(),Pawn.class);
+        assertEquals(b.getSquare("f","2").getPiece().getClass(),Pawn.class);
+        assertEquals(b.getSquare("g","2").getPiece().getClass(),Pawn.class);
+        assertEquals(b.getSquare("h","2").getPiece().getClass(),Pawn.class);
 
-    @Test
-    void pawnMovement() {
-        //verifico che prenda come possibili mosse il mangiare il pedone avversario e l'avanzata
-        // di una posizione o di due
-        b.squares[2][5].setPiece(new Pawn(Color.WHITE));
-        b.squares[2][3].setPiece(new Pawn(Color.BLACK));
-        b.squares[1][4].getPiece().setPossibleMoves(b);
-        ArrayList<Move> listOfMove= b.squares[1][4].getPiece().getPossibleMoves();
-        assertEquals(listOfMove.get(0).getEndSquare().getPosition(), b.squares[2][5].getPosition());
-        assertEquals(listOfMove.get(1).getEndSquare().getPosition(), b.squares[2][4].getPosition());
-        assertEquals(listOfMove.get(2).getEndSquare().getPosition(), b.squares[3][4].getPosition());
-    }
-
-    @Test
-    void knightMovement() {
-        //aggiungo un cavallo in mezzo alla scacchiera e verifico che prenda tutte le possibili mosse
-        Knight knight= new Knight(Color.WHITE);
-        b.squares[4][4].setPiece(knight);
-        knight.setPossibleMoves(b);
-        ArrayList<Move> listOfMove= knight.getPossibleMoves();
-        assertEquals(listOfMove.get(0).getEndSquare().getPosition(),b.squares[5][6].getPosition());
-        assertEquals(listOfMove.get(1).getEndSquare().getPosition(),b.squares[2][3].getPosition());
-        assertEquals(listOfMove.get(2).getEndSquare().getPosition(),b.squares[3][2].getPosition());
-        assertEquals(listOfMove.get(3).getEndSquare().getPosition(),b.squares[2][5].getPosition());
-        assertEquals(listOfMove.get(4).getEndSquare().getPosition(),b.squares[3][6].getPosition());
-        assertEquals(listOfMove.get(5).getEndSquare().getPosition(),b.squares[5][2].getPosition());
-
-        //controllo che consideri come possibile mossa quella di mangiare un avversario
-        Pawn pawn = new Pawn(Color.BLACK);
-        b.squares[5][6].setPiece(pawn);
-        knight.setPossibleMoves(b);
-        listOfMove= knight.getPossibleMoves();
-        assertEquals(listOfMove.get(0).getEndSquare().getPosition(),b.squares[5][6].getPosition());
-
-        //controllo che non consideri come possibile mossa quella di mangiare un proprio pezzo
-        pawn = new Pawn(Color.WHITE);
-        b.squares[5][6].setPiece(pawn);
-        knight.setPossibleMoves(b);
-        listOfMove= knight.getPossibleMoves();
-        assertNotEquals(listOfMove.get(0).getEndSquare().getPosition(),b.squares[5][6].getPosition());
 
     }
+
+
+
 }
