@@ -8,7 +8,7 @@ public class GameModel extends Subject{
     private final Player blackPlayer;
     private Player turn;
     private final Board board;
-    private ArrayList<Move> movesDone;
+    private ArrayList<String> movesDone;
     private GameState state;
 
     public GameModel() {
@@ -37,7 +37,7 @@ public class GameModel extends Subject{
         return board;
     }
 
-    public ArrayList<Move> getMovesDone() {
+    public ArrayList<String> getMovesDone() {
         return movesDone;
     }
 
@@ -49,8 +49,10 @@ public class GameModel extends Subject{
             turn= blackPlayer;
         }else turn= whitePlayer;
     }
+
+
     //metodo che data una mossa legale aggiorna la lista dei pezzi in caso di cattura e aggiorna la scacchiera e cambia il turno
-    public void movePiece(Move move){
+    public void executeMove(Move move){
         if(move.getEndSquare().isOccupied()){
             if(turn.isWhite()){
                 blackPlayer.getListOfPieces().remove(move.getEndSquare().getPiece());
@@ -58,8 +60,10 @@ public class GameModel extends Subject{
                 whitePlayer.getListOfPieces().remove(move.getEndSquare().getPiece());
             }
         }
+        movesDone.add(move.getMoveInChessNotation());
+
         board.updateBoard(move);
-        movesDone.add(move);
+
         changeTurn();
         if(state == GameState.START){
             state= GameState.INPLAY;

@@ -8,7 +8,7 @@ import java.util.ArrayList;
 public abstract class Piece {
     private boolean captured = false;
     private Color color;
-    private boolean hasMoved = false;
+    private boolean hasMoved = false;       //TODO: Controllare se questi attributi sono modificati correttamente nei vari metodi che lo dovno fare
     private boolean firstMove= true;
     private Coordinate position;
     protected ArrayList<Movement> listOfMovementRules;
@@ -67,7 +67,8 @@ public abstract class Piece {
             possibleMoves.addAll(movementRule.getMovesFromMovementRule(startPosition, board));
 
 
-    };
+    }
+    public abstract String getRightLetterForChessNotation();
 
 
     public void setHasMoved() {
@@ -78,7 +79,7 @@ public abstract class Piece {
         captured = true;
     }
 
-    //TODO: TESTARE setPossibleMoves()
+
 }
 
 

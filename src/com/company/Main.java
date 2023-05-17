@@ -35,16 +35,16 @@ public class Main {
             for(Square s: ls){
                 System.out.print(s.getPiece()+" ");
             }
-            System.out.println("");
+            System.out.println();
 
         }
         Move m = gameModel.getBoard().getSquares()[6][3].getPiece().getPossibleMoves().get(0);
-        gameModel.movePiece(m);
+        gameModel.executeMove(m);
         for(Square[] ls :gameModel.getBoard().getSquares()){
             for(Square s: ls){
                 System.out.print(s.getPiece()+" ");
             }
-            System.out.println("");
+            System.out.println();
 
         }
 

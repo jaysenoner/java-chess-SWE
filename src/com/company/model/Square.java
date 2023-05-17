@@ -8,10 +8,6 @@ public class Square {
     private final Color color;
     private Piece piece;
 
-    public Boolean getOccupied() {
-        return occupied;
-    }
-
     public Color getColor() {
         return color;
     }
@@ -31,6 +27,8 @@ public class Square {
         if(piece != null) {
             this.occupied = true;
             piece.setPosition(position);
+        }else{
+            occupied=false;
         }
     }
 

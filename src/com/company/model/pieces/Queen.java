@@ -20,4 +20,9 @@ public class Queen extends Piece{
         listOfMovementRules.add(new VerticalMovement(true));
     }
 
+    @Override
+    public String getRightLetterForChessNotation() {
+        return "Q";
+    }
+
 }

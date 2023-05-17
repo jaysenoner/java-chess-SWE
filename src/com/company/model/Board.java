@@ -97,5 +97,10 @@ public class Board {
         return squares;
     }
 
+    public Square getSquare(String letter, String number){
+        return getSquare(new Coordinate(letter,number));
+
+    }
+
 
 }
