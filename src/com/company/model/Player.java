@@ -33,6 +33,15 @@ public class Player {
         }
         calculateAllPossibleMoves();
     }
+    //getter
+    public ArrayList<Move> getListOfMoves() {
+        return listOfMoves;
+    }
+
+    public ArrayList<Piece> getListOfPieces() {
+        return listOfPieces;
+    }
+
 
     //Metodo che per ogni pezzo bianco/nero(a seconda dello specifico player) calcola tutte le mosse POSSIBILI(non controlla la legalità)
     //e le inserisce nella lista listOfMoves.
@@ -44,12 +53,24 @@ public class Player {
         }
     }
     //costruttore senza nome
-    public Player(boolean white) {
+    public Player(Board board, boolean white) {
+        this.board = board;
+        listOfMoves = new ArrayList<>();
+        listOfPieces = new ArrayList<>();
         if(white) {
             this.color = Color.WHITE;
-        }else{
-            this.color = Color.BLACK;
+            for(int i = 7; i >= 6 ; i--)
+                for(int j = 0; j < 8 ; j++)
+                    listOfPieces.add(board.squares[i][j].getPiece());
+
         }
+        else{
+            this.color = Color.BLACK;
+            for(int i = 0; i < 2; i++)
+                for(int j= 0 ; j < 8; j++)
+                    listOfPieces.add(board.squares[i][j].getPiece());
+        }
+        calculateAllPossibleMoves();
 
     }
 

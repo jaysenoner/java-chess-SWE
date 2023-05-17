@@ -2,9 +2,11 @@ package com.company;
 
 
 import com.company.model.*;
+import com.company.model.pieces.Piece;
 import com.company.model.pieces.Rook;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 
 public class Main {
@@ -28,6 +30,27 @@ public class Main {
         for(Move m:listOfMove){
             System.out.println(m.getEndSquare().getPosition().getRow() +" "+ m.getEndSquare().getPosition().getCol());
         }*/
+        GameModel gameModel= new GameModel();
+        for(Square[] ls :gameModel.getBoard().getSquares()){
+            for(Square s: ls){
+                System.out.print(s.getPiece()+" ");
+            }
+            System.out.println("");
+
+        }
+        Move m = gameModel.getBoard().getSquares()[6][3].getPiece().getPossibleMoves().get(0);
+        gameModel.movePiece(m);
+        for(Square[] ls :gameModel.getBoard().getSquares()){
+            for(Square s: ls){
+                System.out.print(s.getPiece()+" ");
+            }
+            System.out.println("");
+
+        }
+
+
+
+
 
 
 

@@ -65,6 +65,8 @@ public class Board {
 
     }
 
+
+
     //TODO:controllare metodo changeTurn
     public void changeTurn(){
         this.isFirstTurn = false;
@@ -110,8 +112,9 @@ public class Board {
         }
     }
 
-    public void updateBoard(Move move, Piece p){
-        move.getStartSquare().getPiece().setHasMoved();
+    public void updateBoard(Move move){
+        Piece p = move.getStartSquare().getPiece();
+        p.setHasMoved();
         move.getStartSquare().setPiece(null);
         move.getEndSquare().setPiece(p);
     }

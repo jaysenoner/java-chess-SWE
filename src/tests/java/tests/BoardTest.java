@@ -97,6 +97,11 @@ class BoardTest {
         assertEquals(b.squares[7][7].getPiece().getClass(), Rook.class);
         assertEquals(b.squares[7][7].getPiece().getColor(), Color.WHITE);
 
+        for(int j = 0 ; j < 8 ; j++){
+            assertEquals(b.squares[6][j].getPiece().getClass(), Pawn.class);
+            assertEquals(b.squares[6][j].getPiece().getColor(), Color.WHITE);
+        }
+
     }
 
     @Test
