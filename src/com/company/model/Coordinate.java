@@ -53,4 +53,8 @@ public class Coordinate {
         return letters[col] + numbers[row];
     }
 
+    public String colToChessNotation(){
+        return letters[col];
+    }
+
 }

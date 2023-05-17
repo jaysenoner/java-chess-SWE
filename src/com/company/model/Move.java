@@ -1,5 +1,8 @@
 package com.company.model;
 
+import com.company.model.pieces.Pawn;
+import com.company.model.pieces.Piece;
+
 import java.util.ArrayList;
 
 public class Move {
@@ -17,6 +20,9 @@ public class Move {
         }
         this.startSquare = startSquare;
     }
+
+
+
     public void setEndSquare(Square endSquare) {
         this.endSquare = endSquare;
     }
@@ -54,6 +60,25 @@ public class Move {
 
     public boolean isValid(){
         return (startSquare != null && endSquare!= null && startSquare.getPosition().isValid() && endSquare.getPosition().isValid()) ;
+    }
+
+    //Metodo che data una mossa legale(quindi gia controllata a priori) ne determina l'espressione in notazione algebrica
+    // DA CHIAMARE PRIMA CHE VENGA FATTO L'UPDATE DELLA SCACCHIERA, altrimenti non torna.
+    // Per torre e cavallo scrive anche la colonna di appartenenza del pezzo, al fine di evitare ambiguità sulla mossa effettuata
+    public String getMoveInChessNotation(){
+
+        String moveInChessNotation;
+        String letter = startSquare.getPiece().getRightLetterForChessNotation();
+
+          if(letter.equals("") || letter.equals("R") || letter.equals("N"))
+              moveInChessNotation = letter +
+                      startSquare.getPosition().colToChessNotation();
+          else moveInChessNotation = letter;
+          if(endSquare.isOccupied())
+              moveInChessNotation = moveInChessNotation.concat("x" + endSquare.getPosition().fromIndexToChessNotation());
+          else moveInChessNotation = moveInChessNotation.concat(endSquare.getPosition().fromIndexToChessNotation());
+        return moveInChessNotation;
+
     }
 
 }

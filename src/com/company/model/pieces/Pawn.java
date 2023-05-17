@@ -16,5 +16,10 @@ public class Pawn extends Piece{
         listOfMovementRules.add(new PawnMovement());
     }
 
+    @Override
+    public String getRightLetterForChessNotation() {
+        return "";
+    }
+
 
 }

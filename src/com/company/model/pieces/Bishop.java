@@ -11,4 +11,9 @@ public class Bishop extends Piece {
         listOfMovementRules.add(new DiagonalMovement(true));
     }
 
+    @Override
+    public String getRightLetterForChessNotation() {
+        return "B";
+    }
+
 }

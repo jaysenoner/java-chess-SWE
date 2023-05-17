@@ -18,7 +18,10 @@ public class King extends Piece{
         listOfMovementRules.add(new VerticalMovement(false));
     }
 
-
+    @Override
+    public String getRightLetterForChessNotation() {
+        return "K";
+    }
 
 
     public Boolean getChecked() {

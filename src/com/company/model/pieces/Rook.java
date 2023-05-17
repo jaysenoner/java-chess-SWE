@@ -18,4 +18,9 @@ public class Rook extends Piece{
         listOfMovementRules.add(new VerticalMovement(true));
     }
 
+    @Override
+    public String getRightLetterForChessNotation() {
+        return "R";
+    }
+
 }

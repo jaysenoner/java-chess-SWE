@@ -13,5 +13,10 @@ public class Knight extends Piece{
         listOfMovementRules.add(new KnightMovement());
     }
 
+    @Override
+    public String getRightLetterForChessNotation() {
+        return "N";
+    }
+
 
 }
