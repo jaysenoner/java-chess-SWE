@@ -4,19 +4,19 @@ import java.util.ArrayList;
 
 enum GameState{START, INPLAY, CHECK, CHECKMATE, TIE}
 public class GameModel extends Subject{
-    private Player whitePlayer;
-    private Player blackPlayer;
-    private Color turn;
-    private Board board;
-    private ArrayList<Move> listOfMovement;
+    private final Player whitePlayer;
+    private final Player blackPlayer;
+    private Player turn;
+    private final Board board;
+    private ArrayList<Move> movesDone;
     private GameState state;
 
     public GameModel() {
         this.board = new Board(false);
         this.whitePlayer = new Player(board, true);
         this.blackPlayer = new Player(board, false);
-        this.turn = Color.WHITE ;
-        this.listOfMovement = new ArrayList<Move>();
+        this.turn = whitePlayer ;
+        this.movesDone = new ArrayList<>();
         this.state = GameState.START;
     }
 
@@ -29,7 +29,7 @@ public class GameModel extends Subject{
         return blackPlayer;
     }
 
-    public Color getTurn() {
+    public Player getTurn() {
         return turn;
     }
 
@@ -37,22 +37,29 @@ public class GameModel extends Subject{
         return board;
     }
 
-    public ArrayList<Move> getListOfMovement() {
-        return listOfMovement;
+    public ArrayList<Move> getMovesDone() {
+        return movesDone;
     }
 
     public GameState getState() {
         return state;
     }
     public void changeTurn() {
-        if(turn == Color.WHITE){
-            turn= Color.BLACK;
-        }else turn= Color.WHITE;
+        if(turn.isWhite()){
+            turn= blackPlayer;
+        }else turn= whitePlayer;
     }
-
+    //metodo che data una mossa legale aggiorna la lista dei pezzi in caso di cattura e aggiorna la scacchiera e cambia il turno
     public void movePiece(Move move){
+        if(move.getEndSquare().isOccupied()){
+            if(turn.isWhite()){
+                blackPlayer.getListOfPieces().remove(move.getEndSquare().getPiece());
+            }else{
+                whitePlayer.getListOfPieces().remove(move.getEndSquare().getPiece());
+            }
+        }
         board.updateBoard(move);
-        listOfMovement.add(move);
+        movesDone.add(move);
         changeTurn();
         if(state == GameState.START){
             state= GameState.INPLAY;

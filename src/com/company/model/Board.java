@@ -66,32 +66,7 @@ public class Board {
     }
 
 
-
-    //TODO:controllare metodo changeTurn
-    public void changeTurn(){
-        this.isFirstTurn = false;
-        //ruota scacchiera
-        Square s;
-        for( int i=0; i<4; i++){
-            for(int j = 0; j<8; j++) {
-                s= this.squares[i][j] ;
-                this.squares[i][j]= this.squares[7-i][7-j];
-                this.squares[7-i][7-j] = s;
-            }
-        }
-    }
-
-    public boolean removePiece(Coordinate c){
-        if(getSquare(c).isOccupied()) {
-            getSquare(c).getPiece().setCaptured();
-            getSquare(c).setPiece(null);
-            return true;
-        }else {
-            return false;
-        }
-    }
-    public boolean addPiece(Coordinate c, Piece p){
-        Square s= getSquare(c);
+    public boolean addPiece(Square s, Piece p){
         if(s.isOccupied()){
             return false;
         }else{
