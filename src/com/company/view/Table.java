@@ -1,5 +1,8 @@
 package com.company.view;
 
+import com.company.model.Board;
+import com.company.model.Square;
+
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
@@ -11,13 +14,14 @@ public class Table {
     private final JFrame chessFrame;
     private final Dimension frameDimension= new Dimension(600, 600);
     private static final String COLS = "ABCDEFGH";
-    private JButton[][] chessBoardSquares = new JButton[8][8];
+    private Square[][] chessBoardSquares;
     private JPanel chessBoard;
 
-    public Table() {
+    public Table(Board board) {
         this.chessFrame = new JFrame("Chess");
         this.chessFrame.setSize(frameDimension);
         this.chessFrame.setVisible(true);
+        this.chessBoardSquares= board.getSquares();
         chessFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
     }
@@ -46,38 +50,31 @@ public class Table {
         chessFrame.setVisible(true);
     }
     public void createChessBoard(){
-
         //scacchiera matrice di bottoni
         chessBoard = new JPanel(new GridLayout(0, 9));
         chessBoard.setBorder(new LineBorder(Color.BLACK));
         chessFrame.add(chessBoard);
 
         Insets buttonMargin = new Insets(0,0,0,0);
-        int count= 0;
-        for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 8; j++) {
-                JButton b = new JButton();
-                b.setMargin(buttonMargin);
+        int n=8;
+        for(Square[] ss : chessBoardSquares){
+            chessBoard.add(new JLabel("" + (n--), SwingConstants.CENTER));
+            for(Square s: ss){
+                s.setMargin(buttonMargin);
                 ImageIcon icon = new ImageIcon(new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB));
-                b.setIcon(icon);
-                if (count % 2==0) {
-                    b.setBackground(Color.WHITE);
-                } else {
-                    b.setBackground(Color.BLACK);
+                s.setIcon(icon);
+                if(s.getColor()== com.company.model.Color.WHITE){
+                    s.setBackground(Color.WHITE);
+                }else{
+                    s.setBackground(Color.BLACK);
                 }
-                count++;
-                chessBoardSquares[j][i] = b;
-            }
-            count++;
-        }
-        for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 8; j++) {
-                switch (j) {
-                    case 0:
-                        chessBoard.add(new JLabel("" + (8-i), SwingConstants.CENTER));
-                    default:
-                        chessBoard.add(chessBoardSquares[j][i]);
-                }
+                s.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        System.out.println(s.getPiece().getClass());
+                    }
+                });
+                chessBoard.add(s);
             }
         }
         chessBoard.add(new JLabel(""));

@@ -2,7 +2,9 @@ package com.company.model;
 
 import com.company.model.pieces.Piece;
 
-public class Square {
+import javax.swing.*;
+
+public class Square extends JButton {
     private final Coordinate position;
     private Boolean occupied = false;
     private final Color color;

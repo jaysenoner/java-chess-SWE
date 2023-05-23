@@ -2,6 +2,7 @@ package com.company.model;
 
 import com.company.model.pieces.*;
 
+
 import java.util.ArrayList;
 
 public class Board {
