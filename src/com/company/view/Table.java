@@ -61,7 +61,12 @@ public class Table {
             chessBoard.add(new JLabel("" + (n--), SwingConstants.CENTER));
             for(Square s: ss){
                 s.setMargin(buttonMargin);
-                ImageIcon icon = new ImageIcon(new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB));
+                //ImageIcon icon = new ImageIcon(new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB));
+                String image = "";
+                if(s.getPiece() != null) {
+                    image = s.getPiece().getImageURL();
+                }
+                ImageIcon icon = new ImageIcon(image);
                 s.setIcon(icon);
                 if(s.getColor()== com.company.model.Color.WHITE){
                     s.setBackground(Color.WHITE);

@@ -15,6 +15,10 @@ public class Queen extends Piece{
 
     public Queen(Color color) {
         super(color);
+        if( color == Color.WHITE)
+            imageURL="image/WQ.gif";
+        else
+            imageURL="image/BQ.gif";
         listOfMovementRules.add(new DiagonalMovement(true));
         listOfMovementRules.add(new HorizontalMovement(true));
         listOfMovementRules.add(new VerticalMovement(true));

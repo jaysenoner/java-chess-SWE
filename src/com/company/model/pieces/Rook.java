@@ -14,6 +14,10 @@ public class Rook extends Piece{
 
     public Rook(Color color) {
         super(color);
+        if( color == Color.WHITE)
+            imageURL="image/WR.gif";
+        else
+            imageURL="image/BR.gif";
         listOfMovementRules.add(new HorizontalMovement(true));
         listOfMovementRules.add(new VerticalMovement(true));
     }

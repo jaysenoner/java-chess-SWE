@@ -13,6 +13,10 @@ public class King extends Piece{
 
     public King(Color color) {
         super(color);
+        if( color == Color.WHITE)
+            imageURL="image/WK.gif";
+        else
+            imageURL="image/BK.gif";
         listOfMovementRules.add(new DiagonalMovement(false));
         listOfMovementRules.add(new HorizontalMovement(false));
         listOfMovementRules.add(new VerticalMovement(false));

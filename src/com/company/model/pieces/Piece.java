@@ -11,8 +11,10 @@ public abstract class Piece {
     private boolean hasMoved = false;       //TODO: Controllare se questi attributi sono modificati correttamente nei vari metodi che lo dovno fare
     private boolean firstMove= true;
     private Coordinate position;
+    protected String imageURL;
     protected ArrayList<Movement> listOfMovementRules;
     protected ArrayList<Move> possibleMoves;
+
 
     public Piece(Color color) {
         this.color= color;
@@ -41,6 +43,10 @@ public abstract class Piece {
         return possibleMoves;
     }
 
+    public String getImageURL() {
+        return imageURL;
+    }
+
     public void setCaptured(boolean captured) {
         this.captured = captured;
     }
@@ -65,9 +71,8 @@ public abstract class Piece {
         possibleMoves.clear();
         for(Movement movementRule: listOfMovementRules)
             possibleMoves.addAll(movementRule.getMovesFromMovementRule(startPosition, board));
-
-
     }
+
     public abstract String getRightLetterForChessNotation();
 
 

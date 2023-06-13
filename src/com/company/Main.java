@@ -14,10 +14,13 @@ public class Main {
 
     public static void main(String[] args) {
         // write your code here
-        Board board= new Board(false);
-        Table table= new Table(board);
-        table.createMenuBar();
-        table.createChessBoard();
+        GameModel gameModel= new GameModel();
+        gameModel.getTable().createMenuBar();
+        gameModel.getTable().createChessBoard();
+        Move move= new Move(gameModel.getBoard().getSquare(0,1),gameModel.getBoard().getSquare(2,1) );
+        gameModel.executeMove(move);
+        gameModel.getTable().createMenuBar();
+        gameModel.getTable().createChessBoard();
 
     }
 }

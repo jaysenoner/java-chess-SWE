@@ -1,5 +1,7 @@
 package com.company.model;
 
+import com.company.view.Table;
+
 import java.util.ArrayList;
 
 enum GameState{START, INPLAY, CHECK, CHECKMATE, TIE}
@@ -10,6 +12,7 @@ public class GameModel extends Subject{
     private final Board board;
     private ArrayList<String> movesDone;
     private GameState state;
+    private Table table;
 
     public GameModel() {
         this.board = new Board(false);
@@ -18,6 +21,7 @@ public class GameModel extends Subject{
         this.turn = whitePlayer ;
         this.movesDone = new ArrayList<>();
         this.state = GameState.START;
+        this.table= new Table(board);
     }
 
     //getter
@@ -35,6 +39,10 @@ public class GameModel extends Subject{
 
     public Board getBoard() {
         return board;
+    }
+
+    public Table getTable() {
+        return table;
     }
 
     public ArrayList<String> getMovesDone() {

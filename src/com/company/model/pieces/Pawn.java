@@ -13,6 +13,10 @@ public class Pawn extends Piece{
 
     public Pawn(Color color) {
         super(color);
+        if( color == Color.WHITE)
+            imageURL="image/WP.gif";
+        else
+            imageURL="image/BP.gif";
         listOfMovementRules.add(new PawnMovement());
     }
 
