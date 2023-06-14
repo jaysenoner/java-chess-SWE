@@ -93,6 +93,7 @@ public class Board {
         p.setHasMoved();
         move.getStartSquare().setPiece(null);
         move.getEndSquare().setPiece(p);
+        p.setPosition(move.getEndSquare().getPosition());
     }
     public Square[][] getSquares(){
         return squares;

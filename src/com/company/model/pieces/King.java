@@ -2,9 +2,12 @@ package com.company.model.pieces;
 
 
 import com.company.model.Color;
+import com.company.model.Square;
 import com.company.model.movement.DiagonalMovement;
 import com.company.model.movement.HorizontalMovement;
 import com.company.model.movement.VerticalMovement;
+
+import java.util.ArrayList;
 
 public class King extends Piece{
 

@@ -1,6 +1,7 @@
 package com.company.view;
 
 import com.company.model.Board;
+import com.company.model.Move;
 import com.company.model.Square;
 
 import javax.swing.*;
@@ -8,7 +9,6 @@ import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
 
 public class Table {
     private final JFrame chessFrame;
@@ -16,6 +16,7 @@ public class Table {
     private static final String COLS = "ABCDEFGH";
     private Square[][] chessBoardSquares;
     private JPanel chessBoard;
+    private Observer observer;
 
     public Table(Board board) {
         this.chessFrame = new JFrame("Chess");
@@ -23,6 +24,7 @@ public class Table {
         this.chessFrame.setVisible(true);
         this.chessBoardSquares= board.getSquares();
         chessFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.observer = new BoardObserver();
 
     }
     public void createMenuBar() {
@@ -61,10 +63,11 @@ public class Table {
             chessBoard.add(new JLabel("" + (n--), SwingConstants.CENTER));
             for(Square s: ss){
                 s.setMargin(buttonMargin);
-                //ImageIcon icon = new ImageIcon(new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB));
                 String image = "";
                 if(s.getPiece() != null) {
                     image = s.getPiece().getImageURL();
+                }else{
+                    s.setEnabled(false);
                 }
                 ImageIcon icon = new ImageIcon(image);
                 s.setIcon(icon);
@@ -76,7 +79,7 @@ public class Table {
                 s.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        System.out.println(s.getPiece().getClass());
+                        observer.update(s);
                     }
                 });
                 chessBoard.add(s);
@@ -87,5 +90,25 @@ public class Table {
             chessBoard.add(new JLabel(COLS.substring(i, i + 1), SwingConstants.CENTER));
         }
         chessFrame.setVisible(true);
+    }
+
+    public void seePossibleMovement(Square s) {
+            for(Move move : s.getPiece().getPossibleMoves()){
+                move.getEndSquare().setBackground(Color.DARK_GRAY);
+                move.getEndSquare().setEnabled(true);
+            }
+    }
+    public void reset(){
+        for(Square[] ss : chessBoardSquares) {
+            for (Square s : ss) {
+                if (s.getBackground() == Color.DARK_GRAY) {
+                    if (s.getColor() == com.company.model.Color.WHITE) {
+                        s.setBackground(Color.WHITE);
+                    } else {
+                        s.setBackground(Color.BLACK);
+                    }
+                }
+            }
+        }
     }
 }

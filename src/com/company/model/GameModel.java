@@ -1,5 +1,9 @@
 package com.company.model;
 
+import com.company.control.Controller;
+import com.company.control.GameController;
+import com.company.view.BoardObserver;
+import com.company.view.Observer;
 import com.company.view.Table;
 
 import java.util.ArrayList;
@@ -13,6 +17,7 @@ public class GameModel extends Subject{
     private ArrayList<String> movesDone;
     private GameState state;
     private Table table;
+    public GameController gameController;
 
     public GameModel() {
         this.board = new Board(false);
@@ -22,6 +27,11 @@ public class GameModel extends Subject{
         this.movesDone = new ArrayList<>();
         this.state = GameState.START;
         this.table= new Table(board);
+        ArrayList<Observer> observers = new ArrayList<>();
+        observers.add(new BoardObserver(this, this.table));
+        this.observers = observers;
+        this.gameController = new GameController(this);
+        //TODO: controllare game controller e observer
     }
 
     //getter
@@ -56,6 +66,7 @@ public class GameModel extends Subject{
         if(turn.isWhite()){
             turn= blackPlayer;
         }else turn= whitePlayer;
+        turn.calculateAllPossibleMoves();
     }
 
 
@@ -69,9 +80,7 @@ public class GameModel extends Subject{
             }
         }
         movesDone.add(move.getMoveInChessNotation());
-
         board.updateBoard(move);
-
         changeTurn();
         if(state == GameState.START){
             state= GameState.INPLAY;

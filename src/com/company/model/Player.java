@@ -49,7 +49,7 @@ public class Player {
 
     //Metodo che per ogni pezzo bianco/nero(a seconda dello specifico player) calcola tutte le mosse POSSIBILI(non controlla la legalità)
     //e le inserisce nella lista listOfMoves.
-    private void calculateAllPossibleMoves(){
+    public void calculateAllPossibleMoves(){
         listOfPossibleMoves.clear();
         for(Piece p: listOfPieces){
                 p.setPossibleMoves(board);
