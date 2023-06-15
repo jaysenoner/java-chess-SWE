@@ -24,7 +24,7 @@ public class Table {
         this.chessFrame.setVisible(true);
         this.chessBoardSquares= board.getSquares();
         chessFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.observer = new BoardObserver();
+        // TODO: this.observer = new BoardObserver();
 
     }
     public void createMenuBar() {
