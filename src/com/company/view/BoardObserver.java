@@ -25,7 +25,6 @@ public class BoardObserver extends Observer {
         if( s.getPiece() != null){
             start = s;
             table.reset();
-
             table.seePossibleMovement(s);
         }
         if(s.getBackground() == Color.DARK_GRAY){

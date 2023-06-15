@@ -27,6 +27,8 @@ public class GameModel extends Subject{
         this.movesDone = new ArrayList<>();
         this.state = GameState.START;
         this.table= new Table(board);
+        table.createMenuBar();
+        table.createChessBoard();
         ArrayList<Observer> observers = new ArrayList<>();
         observers.add(new BoardObserver(this, this.table));
         this.observers = observers;
