@@ -1,15 +1,12 @@
 package com.company.model;
 
 import com.company.control.Controller;
-import com.company.control.GameController;
-import com.company.view.BoardObserver;
-import com.company.view.Observer;
 import com.company.view.Table;
 
 import java.util.ArrayList;
 
 enum GameState{START, INPLAY, CHECK, CHECKMATE, TIE}
-public class GameModel extends Subject{
+public class GameModel{
     private final Player whitePlayer;
     private final Player blackPlayer;
     private Player turn;
@@ -17,7 +14,7 @@ public class GameModel extends Subject{
     private ArrayList<String> movesDone;
     private GameState state;
     private Table table;
-    public GameController gameController;
+    public Controller gameController;
 
     public GameModel() {
         this.board = new Board(false);
@@ -26,13 +23,6 @@ public class GameModel extends Subject{
         this.turn = whitePlayer ;
         this.movesDone = new ArrayList<>();
         this.state = GameState.START;
-        this.table= new Table(board);
-        table.createMenuBar();
-        table.createChessBoard();
-        ArrayList<Observer> observers = new ArrayList<>();
-        observers.add(new BoardObserver(this, this.table));
-        this.observers = observers;
-        this.gameController = new GameController(this);
         //TODO: controllare game controller e observer
     }
 

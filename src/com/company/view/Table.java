@@ -1,6 +1,5 @@
 package com.company.view;
-
-import com.company.model.Board;
+import com.company.model.GameModel;
 import com.company.model.Move;
 import com.company.model.Square;
 
@@ -10,41 +9,51 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class Table extends Observer {
+public class Table {
     private final JFrame chessFrame;
     private final Dimension frameDimension= new Dimension(600, 600);
     private static final String COLS = "ABCDEFGH";
-    private Square[][] chessBoardSquares;
+    private GameModel gameModel;
     private JPanel chessBoard;
-    private Observer observer;
+    private Square[][] chessBoardSquares;
+    private JMenuBar menuBar;
 
-    public Table(Board board) {
+    public JMenu getPgn() {
+        return pgn;
+    }
+
+    public void setPgn(JMenu pgn) {
+        this.pgn = pgn;
+    }
+
+    public JMenu getNewGame() {
+        return newGame;
+    }
+
+    public void setNewGame(JMenu newGame) {
+        this.newGame = newGame;
+    }
+
+    private JMenu pgn;
+    private JMenu newGame;
+
+    public Table(GameModel gameModel) {
         this.chessFrame = new JFrame("Chess");
         this.chessFrame.setSize(frameDimension);
         this.chessFrame.setVisible(true);
-        this.chessBoardSquares= board.getSquares();
+        this.gameModel = gameModel;
+        this.menuBar = new JMenuBar();
+        this.newGame = new JMenu("New Game");
+        this.pgn = new JMenu("Download PGN");
+        this.chessBoardSquares = gameModel.getBoard().squares;
         chessFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        // TODO: this.observer = new BoardObserver();
+
 
     }
     public void createMenuBar() {
-        JMenuBar menuBar = new JMenuBar();
-        JMenu m1 = new JMenu("New Game");
-        JMenu m2 = new JMenu("Download PGN");
-        menuBar.add(m1);
-        menuBar.add(m2);
-        m1.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.out.println("New Game");
-            }
-        });
-        m2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.out.println("This is a PGN file");
-            }
-        });
+        menuBar.add(newGame);
+        menuBar.add(pgn);
+
         // Text Area at the Center
         JTextArea ta = new JTextArea("Java Chess Game created by Jay Senoner and Sara Bernini");
         chessFrame.getContentPane().add(BorderLayout.NORTH, menuBar);
@@ -76,16 +85,7 @@ public class Table extends Observer {
                 }else{
                     s.setBackground(Color.BLACK);
                 }
-                s.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        observer.update(s);
-                        /*if( s.getPiece() != null){
-                            reset();
-                            seePossibleMovement(s);
-                        }*/
-                    }
-                });
+
                 chessBoard.add(s);
             }
         }
@@ -115,19 +115,6 @@ public class Table extends Observer {
             }
         }
     }
-    @Override
-    public void update(Square s) {
-        Square start= null, end;
-        if( s.getPiece() != null){
-            start = s;
-            reset();
-            seePossibleMovement(s);
-        }
-        if(s.getBackground() == Color.DARK_GRAY){
-            end = s;
-            Move move = new Move(start, end);
 
-        }
-        //TODO: implementare metodo
-    }
+
 }
