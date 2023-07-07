@@ -3,9 +3,11 @@ package com.company.control;
 
 import com.company.model.GameModel;
 import com.company.model.Move;
+import com.company.model.Player;
 import com.company.model.Square;
 import com.company.model.pieces.King;
 import com.company.model.pieces.Piece;
+import com.company.model.pieces.Rook;
 import com.company.view.Table;
 
 import java.awt.*;
@@ -43,6 +45,18 @@ public class Controller implements ActionListener {
     }
 
     //todo: se è possibile fare una arrocco
+    //todo: occhio che non si sa se il parametro hasmoved viene modificato dopo le mosse
+    public boolean isShortCastlingPossible(){
+        Player currentPlayer = gameModel.getTurn();
+        return !currentPlayer.getKing().HasMoved() && !currentPlayer.getShortCastleRook().HasMoved();
+    }
+    public boolean isLongCastlingPossible(){
+        Player currentPlayer = gameModel.getTurn();
+        return !currentPlayer.getKing().HasMoved() && !currentPlayer.getLongCastleRook().HasMoved();
+    }
+
+
+    //TODO: Jay: non mi torna come mai si controlla le mosse del giocatore di turno per determinare lo scacco
     //controllo se il re è sotto scacco
     public boolean kingIsChecked(){
         for(Move m: gameModel.getTurn().getListOfPossibleMoves()){
@@ -56,6 +70,9 @@ public class Controller implements ActionListener {
     public boolean kingIsCheckMate(){
        return(kingIsChecked() && gameModel.getTurn().getKing().getPossibleMoves().isEmpty());
     }
+
+    //TODO: Jay: Non mi torna questo metodo, se un pezzo muovendosi mette sotto scacco il proprio re, allora tutte le sue
+    // mosse sono illegali
     // dato un pezzo controllo se muovendolo metto sotto scacco il re, se così fosse rimuovo quella mossa
     //dalle mosse possibili.
     public void checkPiecesMovement(Piece piece){
@@ -76,7 +93,7 @@ public class Controller implements ActionListener {
 
 
     public void update(Square s) {
-        Square start= null, end;
+        Square start = null, end;
         if( s.getPiece() != null){
             start = s;
             table.reset();

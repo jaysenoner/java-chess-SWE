@@ -11,7 +11,7 @@ import java.awt.event.ActionListener;
 
 public class Table {
     private final JFrame chessFrame;
-    private final Dimension frameDimension= new Dimension(600, 600);
+    private final Dimension frameDimension= new Dimension(800, 800);
     private static final String COLS = "ABCDEFGH";
     private GameModel gameModel;
     private JPanel chessBoard;

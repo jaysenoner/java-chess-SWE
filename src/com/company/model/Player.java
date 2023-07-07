@@ -12,9 +12,12 @@ public class Player {
     private ArrayList<Move> listOfPossibleMoves;
     private ArrayList<Piece> listOfPieces;
     private Piece king;
+    private Piece shortCastleRook;
+    private Piece longCastleRook;
 
     //costruttore con nome. Necessità di aver prima inizializzato un oggetto Board contenente tutti i pezzi in posizione
     //iniziale.
+    //todo: controllare con sara che torni
     public Player(String name, Board board, boolean white) {
         this.name = name;
         this.board = board;
@@ -22,14 +25,19 @@ public class Player {
         listOfPieces = new ArrayList<>();
         if(white) {
             king= board.squares[7][4].getPiece();
+            shortCastleRook = board.squares[7][0].getPiece();
+            longCastleRook = board.squares[7][7].getPiece();
             this.color = Color.WHITE;
             for(int i = 7; i >= 6 ; i--)
                 for(int j = 0; j < 8 ; j++)   {
                      listOfPieces.add(board.squares[i][j].getPiece());
                 }
+
         }
         else{
             king= board.squares[0][4].getPiece();
+            shortCastleRook = board.squares[0][7].getPiece();
+            longCastleRook = board.squares[0][0].getPiece();
             this.color = Color.BLACK;
             for(int i = 0; i < 2; i++)
                 for(int j= 0 ; j < 8; j++)
@@ -86,5 +94,13 @@ public class Player {
 
     public String getName(){
         return this.name;
+    }
+
+    public Piece getShortCastleRook() {
+        return shortCastleRook;
+    }
+
+    public Piece getLongCastleRook() {
+        return longCastleRook;
     }
 }
