@@ -141,17 +141,17 @@ public class Controller implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
         //Controllo se è stato premuto un quadrato nella scacchiera
-        if (source.getClass() == Square.class)
-            if(((Square) source).getBackground() != Color.DARK_GRAY) {
+        if (source.getClass() == Square.class) {
+            if (((Square) source).getBackground() != Color.DARK_GRAY) {
                 currentStartSquare = (Square) source;
                 updatePossibleEndSquares(currentStartSquare);
-            }
-            else if(((Square) source).getBackground() == Color.DARK_GRAY){
-               currentEndSquare = (Square) source;
-               gameModel.executeMove(new Move(currentStartSquare, currentEndSquare));
-               table.repaintAll(gameModel);
+            } else if (((Square) source).getBackground() == Color.DARK_GRAY) {
+                currentEndSquare = (Square) source;
+                gameModel.executeMove(new Move(currentStartSquare, currentEndSquare));
+                table.repaintChessBoard(gameModel);
 
             }
+        }
     }
 
 

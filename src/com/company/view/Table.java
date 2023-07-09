@@ -11,6 +11,11 @@ public class Table {
     private final JFrame chessFrame;
     private final Dimension frameDimension = new Dimension(800, 800);
     private static final String COLS = "ABCDEFGH";
+
+    public JPanel getChessBoardPanel() {
+        return chessBoardPanel;
+    }
+
     private JPanel chessBoardPanel;
     private JMenuBar menuBar;
     private JMenu pgn;
@@ -112,22 +117,22 @@ public class Table {
         }
         chessBoardPanel.setVisible(true);
 
-
     }
-    public void repaintAll(GameModel gameModel){
+
+    public void repaintChessBoard(GameModel gameModel){
         Square[][] squares = gameModel.getBoard().getSquares();
         for(Square[] ss : squares){
             for(Square s: ss){
-                s.repaint();
+                String image = "";
+                if(s.getPiece() != null) {
+                     image = s.getPiece().getImageURL();
+                }else{
+                    s.setEnabled(false);
+                }
+                s.setIcon(new ImageIcon(image));
             }
-
         }
     }
-
-
-
-
-
 
 
     public void renderGrayPossibleEndSquares(Square s) {
