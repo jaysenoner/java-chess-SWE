@@ -85,8 +85,8 @@ public class Player {
         calculateAllPossibleMoves();
 
     }
-    public Piece getKing() {
-        return king;
+    public King getKing() {
+        return (King)king;
     }
     public boolean isWhite(){
         return this.color == Color.WHITE;

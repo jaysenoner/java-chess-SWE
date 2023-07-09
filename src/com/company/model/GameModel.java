@@ -13,8 +13,11 @@ public class GameModel{
     private final Board board;
     private ArrayList<String> movesDone;
     private GameState state;
-    private Table table;
     public Controller gameController;
+
+
+
+
 
     public GameModel() {
         this.board = new Board(false);
@@ -23,6 +26,8 @@ public class GameModel{
         this.turn = whitePlayer ;
         this.movesDone = new ArrayList<>();
         this.state = GameState.START;
+
+
         //TODO: controllare game controller e observer
     }
 
@@ -43,9 +48,7 @@ public class GameModel{
         return board;
     }
 
-    public Table getTable() {
-        return table;
-    }
+
 
     public ArrayList<String> getMovesDone() {
         return movesDone;
@@ -54,10 +57,11 @@ public class GameModel{
     public GameState getState() {
         return state;
     }
+
     public void changeTurn() {
         if(turn.isWhite()){
-            turn= blackPlayer;
-        }else turn= whitePlayer;
+            turn = blackPlayer;
+        }else turn = whitePlayer;
         turn.calculateAllPossibleMoves();
     }
 
@@ -78,4 +82,7 @@ public class GameModel{
             state= GameState.INPLAY;
         }
     }
+
+
+
 }

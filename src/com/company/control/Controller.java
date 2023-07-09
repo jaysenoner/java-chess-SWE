@@ -7,7 +7,6 @@ import com.company.model.Player;
 import com.company.model.Square;
 import com.company.model.pieces.King;
 import com.company.model.pieces.Piece;
-import com.company.model.pieces.Rook;
 import com.company.view.Table;
 
 import java.awt.*;
@@ -19,15 +18,26 @@ public class Controller implements ActionListener {
     private GameModel gameModel;
     private Table table;
     private Square[][] squares;
+    private Square currentStartSquare;
+    private Square currentEndSquare;
+
+    private Thread gameLoop;
+    private boolean isRunning;
+
+
+
     public Controller() {
         super();
         gameModel = new GameModel();
-        table = new Table(gameModel);
+        table = new Table();
         squares = gameModel.getBoard().squares;
-        table.createMenuBar();
-        table.createChessBoard();
 
-        //Setup controller
+        /*table.renderMenuBar();
+        table.renderChessBoard(gameModel);
+         */
+        table.initializeView(gameModel);
+
+        //Setup listeners
         table.getPgn().addActionListener(this);
         table.getNewGame().addActionListener(this);
         for(Square[] row: squares)
@@ -37,42 +47,57 @@ public class Controller implements ActionListener {
                 square.addActionListener(this);
             }
         }
-
-
-
-
-
     }
 
-    //todo: se è possibile fare una arrocco
-    //todo: occhio che non si sa se il parametro hasmoved viene modificato dopo le mosse
     public boolean isShortCastlingPossible(){
         Player currentPlayer = gameModel.getTurn();
-        return !currentPlayer.getKing().HasMoved() && !currentPlayer.getShortCastleRook().HasMoved();
+        boolean castle = !currentPlayer.getKing().HasMoved() && !currentPlayer.getShortCastleRook().HasMoved();
+        if(currentPlayer.isWhite())
+        {
+            return castle && (!squares[7][6].isOccupied() && !squares[7][5].isOccupied());
+        }
+        else {
+            return castle && (!squares[0][6].isOccupied() && !squares[0][5].isOccupied());
+        }
     }
+
     public boolean isLongCastlingPossible(){
         Player currentPlayer = gameModel.getTurn();
-        return !currentPlayer.getKing().HasMoved() && !currentPlayer.getLongCastleRook().HasMoved();
+        boolean castle = !currentPlayer.getKing().HasMoved() && !currentPlayer.getShortCastleRook().HasMoved();
+        if(currentPlayer.isWhite())
+        {
+            return castle && (!squares[7][1].isOccupied() && !squares[7][2].isOccupied() && !squares[7][3].isOccupied());
+        }
+        else {
+            return castle && (!squares[0][1].isOccupied() && !squares[0][2].isOccupied() && !squares[0][3].isOccupied());
+        }
     }
 
-
-    //TODO: Jay: non mi torna come mai si controlla le mosse del giocatore di turno per determinare lo scacco
-    //controllo se il re è sotto scacco
+    //controllo se il proprio re è sotto scacco
     public boolean kingIsChecked(){
-        for(Move m: gameModel.getTurn().getListOfPossibleMoves()){
-            if(m.getEndSquare().getPiece().getClass() == King.class){
-                return true;
+        if (gameModel.getTurn().isWhite()) {
+            for (Move m : gameModel.getBlackPlayer().getListOfPossibleMoves()) {
+                if (m.getEndSquare().getPiece().getClass() == King.class) {
+                    gameModel.getTurn().getKing().setChecked(true);
+                    return true;
+                }
+            }
+        }else{
+            for (Move m : gameModel.getWhitePlayer().getListOfPossibleMoves()) {
+                if (m.getEndSquare().getPiece().getClass() == King.class) {
+                    gameModel.getTurn().getKing().setChecked(true);
+                    return true;
+                }
             }
         }
-        return false;
+            return false;
     }
     //controllo se siamo in scacco matto
-    public boolean kingIsCheckMate(){
+    public boolean kingIsCheckMated(){
        return(kingIsChecked() && gameModel.getTurn().getKing().getPossibleMoves().isEmpty());
     }
 
-    //TODO: Jay: Non mi torna questo metodo, se un pezzo muovendosi mette sotto scacco il proprio re, allora tutte le sue
-    // mosse sono illegali
+
     // dato un pezzo controllo se muovendolo metto sotto scacco il re, se così fosse rimuovo quella mossa
     //dalle mosse possibili.
     public void checkPiecesMovement(Piece piece){
@@ -91,25 +116,59 @@ public class Controller implements ActionListener {
         }
     }
 
-
-    public void update(Square s) {
-        Square start = null, end;
-        if( s.getPiece() != null){
-            start = s;
-            table.reset();
-            table.seePossibleMovement(s);
+    //TODO: ESTENDERE CLASSE OBSERVER E FARE OVERRIDE DI UPDATE
+    public void updatePossibleEndSquares(Square s) {
+        if(s.getPiece() != null){
+            //checkPiecesMovement(s.getPiece());
+            table.resetGraySquares(gameModel);
+            table.renderGrayPossibleEndSquares(s);
         }
+
+        /*
         if(s.getBackground() == Color.DARK_GRAY){
             end = s;
             Move move = new Move(start, end);
-            //TODO: implementare metodo
+            gameModel.executeMove(move);
+
         }
 
+         */
     }
 
 
+    //TODO: Diversificare le azioni
     @Override
     public void actionPerformed(ActionEvent e) {
-        update((Square) e.getSource());
+        Object source = e.getSource();
+        //Controllo se è stato premuto un quadrato nella scacchiera
+        if (source.getClass() == Square.class)
+            if(((Square) source).getBackground() != Color.DARK_GRAY) {
+                currentStartSquare = (Square) source;
+                updatePossibleEndSquares(currentStartSquare);
+            }
+            else if(((Square) source).getBackground() == Color.DARK_GRAY){
+               currentEndSquare = (Square) source;
+               gameModel.executeMove(new Move(currentStartSquare, currentEndSquare));
+               table.repaintAll(gameModel);
+
+            }
+    }
+
+
+
+
+    public void setupGameLoop(){
+        gameLoop = new Thread(()->{
+            while(isRunning){
+
+                //TODO:QUI CALCOLO TUTTE LE MOSSE LEGALI,E ASPETTO MOSSA DEL GIOCATORE DI TURNO
+
+                //TODO:DOPO AVER RICEVUTO LA MOSSA,FACCIO UPDATE BOARD
+
+                //TODO: ADESSO RIDISEGNO LA VIEW IN BASE ALLE MODIFICHE SULLA BOARD
+
+            }
+
+        });
     }
 }

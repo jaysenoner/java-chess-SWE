@@ -6,17 +6,19 @@ import com.company.model.Square;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class Table {
     private final JFrame chessFrame;
-    private final Dimension frameDimension= new Dimension(800, 800);
+    private final Dimension frameDimension = new Dimension(800, 800);
     private static final String COLS = "ABCDEFGH";
-    private GameModel gameModel;
-    private JPanel chessBoard;
-    private Square[][] chessBoardSquares;
+    private JPanel chessBoardPanel;
     private JMenuBar menuBar;
+    private JMenu pgn;
+    private JMenu newGame;
+
+    private JButton[][] chessBoard;
+
+
 
     public JMenu getPgn() {
         return pgn;
@@ -34,23 +36,22 @@ public class Table {
         this.newGame = newGame;
     }
 
-    private JMenu pgn;
-    private JMenu newGame;
 
-    public Table(GameModel gameModel) {
+
+    public Table() {
         this.chessFrame = new JFrame("Chess");
         this.chessFrame.setSize(frameDimension);
         this.chessFrame.setVisible(true);
-        this.gameModel = gameModel;
+
         this.menuBar = new JMenuBar();
         this.newGame = new JMenu("New Game");
         this.pgn = new JMenu("Download PGN");
-        this.chessBoardSquares = gameModel.getBoard().squares;
         chessFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 
+
     }
-    public void createMenuBar() {
+    public void renderMenuBar() {
         menuBar.add(newGame);
         menuBar.add(pgn);
 
@@ -60,16 +61,36 @@ public class Table {
         chessFrame.getContentPane().add(BorderLayout.SOUTH, ta);
         chessFrame.setVisible(true);
     }
-    public void createChessBoard(){
-        //scacchiera matrice di bottoni
-        chessBoard = new JPanel(new GridLayout(0, 9));
-        chessBoard.setBorder(new LineBorder(Color.BLACK));
-        chessFrame.add(chessBoard);
 
+
+
+    public void initializeView(GameModel gameModel){
+        renderMenuBar();
+        renderChessBoardPanel(gameModel);
+    }
+
+    public void renderChessBoardPanel(GameModel gameModel){
+        chessBoardPanel = new JPanel(new GridLayout(0, 9));
+        chessBoardPanel.setBorder(new LineBorder(Color.BLACK));
+        chessFrame.add(chessBoardPanel);
+
+        renderChessBoard(gameModel);
+
+        chessBoardPanel.add(new JLabel(""));
+        for (int i = 0; i < 8; i++) {
+            chessBoardPanel.add(new JLabel(COLS.substring(i, i + 1), SwingConstants.CENTER));
+        }
+        chessFrame.setVisible(true);
+
+    }
+
+    public void renderChessBoard(GameModel gameModel){
+
+        Square[][] squares = gameModel.getBoard().getSquares();
         Insets buttonMargin = new Insets(0,0,0,0);
-        int n=8;
-        for(Square[] ss : chessBoardSquares){
-            chessBoard.add(new JLabel("" + (n--), SwingConstants.CENTER));
+        int n = 8;
+        for(Square[] ss : squares){
+            chessBoardPanel.add(new JLabel("" + (n--), SwingConstants.CENTER));
             for(Square s: ss){
                 s.setMargin(buttonMargin);
                 String image = "";
@@ -80,29 +101,43 @@ public class Table {
                 }
                 ImageIcon icon = new ImageIcon(image);
                 s.setIcon(icon);
-                if(s.getColor()== com.company.model.Color.WHITE){
+                if(s.getColor() == com.company.model.Color.WHITE){
                     s.setBackground(Color.WHITE);
                 }else{
                     s.setBackground(Color.BLACK);
                 }
 
-                chessBoard.add(s);
+                chessBoardPanel.add(s);
             }
         }
-        chessBoard.add(new JLabel(""));
-        for (int i = 0; i < 8; i++) {
-            chessBoard.add(new JLabel(COLS.substring(i, i + 1), SwingConstants.CENTER));
+        chessBoardPanel.setVisible(true);
+
+
+    }
+    public void repaintAll(GameModel gameModel){
+        Square[][] squares = gameModel.getBoard().getSquares();
+        for(Square[] ss : squares){
+            for(Square s: ss){
+                s.repaint();
+            }
+
         }
-        chessFrame.setVisible(true);
     }
 
-    public void seePossibleMovement(Square s) {
+
+
+
+
+
+
+    public void renderGrayPossibleEndSquares(Square s) {
             for(Move move : s.getPiece().getPossibleMoves()){
                 move.getEndSquare().setBackground(Color.DARK_GRAY);
                 move.getEndSquare().setEnabled(true);
             }
     }
-    public void reset(){
+    public void resetGraySquares(GameModel gameModel){
+        Square[][] chessBoardSquares = gameModel.getBoard().getSquares();
         for(Square[] ss : chessBoardSquares) {
             for (Square s : ss) {
                 if (s.getBackground() == Color.DARK_GRAY) {
@@ -115,6 +150,5 @@ public class Table {
             }
         }
     }
-
 
 }
