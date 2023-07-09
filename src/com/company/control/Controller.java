@@ -154,9 +154,6 @@ public class Controller implements ActionListener {
         }
     }
 
-
-
-
     public void setupGameLoop(){
         gameLoop = new Thread(()->{
             while(isRunning){

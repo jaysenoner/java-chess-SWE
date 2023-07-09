@@ -11,16 +11,10 @@ public class Table {
     private final JFrame chessFrame;
     private final Dimension frameDimension = new Dimension(800, 800);
     private static final String COLS = "ABCDEFGH";
-
-    public JPanel getChessBoardPanel() {
-        return chessBoardPanel;
-    }
-
     private JPanel chessBoardPanel;
     private JMenuBar menuBar;
     private JMenu pgn;
     private JMenu newGame;
-
     private JButton[][] chessBoard;
 
 
@@ -52,10 +46,9 @@ public class Table {
         this.newGame = new JMenu("New Game");
         this.pgn = new JMenu("Download PGN");
         chessFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-
-
     }
+
+
     public void renderMenuBar() {
         menuBar.add(newGame);
         menuBar.add(pgn);
@@ -90,7 +83,6 @@ public class Table {
     }
 
     public void renderChessBoard(GameModel gameModel){
-
         Square[][] squares = gameModel.getBoard().getSquares();
         Insets buttonMargin = new Insets(0,0,0,0);
         int n = 8;
@@ -117,6 +109,16 @@ public class Table {
         }
         chessBoardPanel.setVisible(true);
 
+
+    }
+    public void repaintAll(GameModel gameModel){
+        Square[][] squares = gameModel.getBoard().getSquares();
+        for(Square[] ss : squares){
+            for(Square s: ss){
+                s.repaint();
+            }
+
+        }
     }
 
     public void repaintChessBoard(GameModel gameModel){
@@ -125,7 +127,7 @@ public class Table {
             for(Square s: ss){
                 String image = "";
                 if(s.getPiece() != null) {
-                     image = s.getPiece().getImageURL();
+                    image = s.getPiece().getImageURL();
                 }else{
                     s.setEnabled(false);
                 }
@@ -133,7 +135,6 @@ public class Table {
             }
         }
     }
-
 
     public void renderGrayPossibleEndSquares(Square s) {
             for(Move move : s.getPiece().getPossibleMoves()){

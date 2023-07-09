@@ -3,10 +3,7 @@ package tests;
 import com.company.model.Board;
 import com.company.model.Color;
 import com.company.model.Move;
-import com.company.model.pieces.Bishop;
-import com.company.model.pieces.Knight;
-import com.company.model.pieces.Pawn;
-import com.company.model.pieces.Rook;
+import com.company.model.pieces.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -121,6 +118,21 @@ class MovementTest {
         knight.setPossibleMoves(b);
         listOfMove= knight.getPossibleMoves();
         assertNotEquals(listOfMove.get(0).getEndSquare().getPosition(),b.squares[5][6].getPosition());
+
+    }
+    @Test
+    void queenMovement(){
+        //aggiungo una regina in mezzo alla scacchiera e verifico che effettui tutte le mosse giuste
+        Queen queen= new Queen(Color.BLACK);
+        b.squares[4][4].setPiece(queen);
+        queen.setPossibleMoves(b);
+        ArrayList<Move> listOfMove= queen.getPossibleMoves();
+        assertEquals(listOfMove.get(6).getEndSquare().getPosition(),b.squares[3][5].getPosition());
+        assertEquals(listOfMove.get(14).getEndSquare().getPosition(),b.squares[4][0].getPosition());
+        assertEquals(listOfMove.get(16).getEndSquare().getPosition(),b.squares[6][4].getPosition());
+        for(Move move : listOfMove){
+            System.out.println(move.getEndSquare().getPosition().getRow() + ""+ move.getEndSquare().getPosition().getCol());
+        }
 
     }
 
