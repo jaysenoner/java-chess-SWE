@@ -70,12 +70,16 @@ public class Move {
         String moveInChessNotation;
         String letter = startSquare.getPiece().getRightLetterForChessNotation();
 
-          if(letter.equals("") || letter.equals("R") || letter.equals("N"))
+          if( letter.equals("R") || letter.equals("N"))
               moveInChessNotation = letter +
                       startSquare.getPosition().colToChessNotation();
           else moveInChessNotation = letter;
-          if(endSquare.isOccupied())
+          if(endSquare.isOccupied()) {
+              if(letter.equals(""))
+                  moveInChessNotation = letter +
+                          startSquare.getPosition().colToChessNotation();
               moveInChessNotation = moveInChessNotation.concat("x" + endSquare.getPosition().fromIndexToChessNotation());
+          }
           else moveInChessNotation = moveInChessNotation.concat(endSquare.getPosition().fromIndexToChessNotation());
         return moveInChessNotation;
 

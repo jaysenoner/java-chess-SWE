@@ -1,6 +1,8 @@
 package com.company.model;
 
 import com.company.control.Controller;
+import com.company.model.pieces.King;
+import com.company.model.pieces.Piece;
 import com.company.view.Table;
 
 import java.util.ArrayList;
@@ -62,7 +64,7 @@ public class GameModel{
         if(turn.isWhite()){
             turn = blackPlayer;
         }else turn = whitePlayer;
-        turn.calculateAllPossibleMoves();
+       // turn.calculateAllPossibleMoves();
     }
 
 
@@ -81,6 +83,63 @@ public class GameModel{
         if(state == GameState.START){
             state= GameState.INPLAY;
         }
+    }
+
+    public void printMovesDone(){
+        for(String move: movesDone){
+            System.out.println(move);
+        }
+    }
+
+    //TODO: metodo problematico
+    public ArrayList<Move> filterLegalMoves(ArrayList<Move> possibleMoves){
+        ArrayList<Move> illegalMovement= new ArrayList<>();
+        for(Move m: possibleMoves) {
+            //try movement
+            this.getBoard().updateBoard(m);
+            if(kingIsChecked()){
+                illegalMovement.add(m);
+            }
+            Move reverseMove = new Move(m.getEndSquare(), m.getStartSquare());
+            this.getBoard().updateBoard(reverseMove);
+
+        }
+
+
+
+        for(Move m : illegalMovement) {
+            possibleMoves.remove(m);
+        }
+        return possibleMoves;
+    }
+
+    //Calcolo tutte le mosse possibili del player avversario per determinare se esiste una mossa che attacca direttamente
+    // il re del player corrente
+    public boolean kingIsChecked(){
+        if (this.turn.isWhite()) {
+            this.blackPlayer.calculateAllPossibleMoves();
+            for (Move move : this.blackPlayer.getListOfPossibleMoves()) {
+                if(move.getEndSquare().getPiece() != null)
+                if (move.getEndSquare().getPiece().getClass() == King.class) {
+                    //this.whitePlayer.getKing().setChecked(true);
+                    return true;
+                }
+            }
+        }else{
+            this.whitePlayer.calculateAllPossibleMoves();
+            for (Move move : this.getWhitePlayer().getListOfPossibleMoves()) {
+                if(move.getEndSquare().getPiece() != null)
+                if (move.getEndSquare().getPiece().getClass() == King.class) {
+                    //this.getTurn().getKing().setChecked(true);
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean kingIsCheckMated(){
+        return(kingIsChecked() && this.getTurn().getKing().getPossibleMoves().isEmpty());
     }
 
 

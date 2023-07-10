@@ -39,7 +39,9 @@ public class Coordinate {
     public int getCol() {
         return col;
     }
-
+    public Square getSquareFromCoords(Board board){
+        return board.getSquares()[row][col];
+    }
     public void setCol(int col) {
         this.col = col;
     }

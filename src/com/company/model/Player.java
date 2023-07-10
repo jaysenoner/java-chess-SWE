@@ -14,20 +14,24 @@ public class Player {
     private Piece king;
     private Piece shortCastleRook;
     private Piece longCastleRook;
+    private ArrayList<Move> shortCastleMove;
+    private ArrayList<Move> longCastleMove;
 
     //costruttore con nome. Necessità di aver prima inizializzato un oggetto Board contenente tutti i pezzi in posizione
     //iniziale.
     //todo: controllare con sara che torni
-    public Player(String name, Board board, boolean white) {
+    public Player(String name, Board board, boolean isWhite) {
         this.name = name;
         this.board = board;
         listOfPossibleMoves = new ArrayList<>();
         listOfPieces = new ArrayList<>();
-        if(white) {
-            king= board.squares[7][4].getPiece();
-            shortCastleRook = board.squares[7][0].getPiece();
-            longCastleRook = board.squares[7][7].getPiece();
+        shortCastleMove = new ArrayList<>();
+        longCastleMove = new ArrayList<>();
+        if(isWhite) {
             this.color = Color.WHITE;
+            king = board.squares[7][4].getPiece();
+            shortCastleRook = board.squares[7][7].getPiece();
+            longCastleRook = board.squares[7][0].getPiece();
             for(int i = 7; i >= 6 ; i--)
                 for(int j = 0; j < 8 ; j++)   {
                      listOfPieces.add(board.squares[i][j].getPiece());
@@ -35,16 +39,45 @@ public class Player {
 
         }
         else{
-            king= board.squares[0][4].getPiece();
+            this.color = Color.BLACK;
+            king = board.squares[0][4].getPiece();
             shortCastleRook = board.squares[0][7].getPiece();
             longCastleRook = board.squares[0][0].getPiece();
-            this.color = Color.BLACK;
             for(int i = 0; i < 2; i++)
                 for(int j= 0 ; j < 8; j++)
                     listOfPieces.add(board.squares[i][j].getPiece());
         }
-        calculateAllPossibleMoves();
+        //calculateAllPossibleMoves();
+        generateCastlingMoves(isWhite);
     }
+
+    private void generateCastlingMoves(boolean isWhite){
+
+        Move shortKingMove;
+        Move shortRookMove;
+        Move longKingMove;
+        Move longRookMove;
+        if(isWhite){
+            shortKingMove = new Move(board.squares[7][4],board.squares[7][6]);
+            shortRookMove = new Move(board.squares[7][7],board.squares[7][5]);
+            longKingMove = new Move(board.squares[7][4],board.squares[7][2]);
+            longRookMove = new Move(board.squares[7][0],board.squares[7][3]);
+
+        }
+        else{
+            shortKingMove = new Move(board.squares[0][4],board.squares[0][6]);
+            shortRookMove = new Move(board.squares[0][7],board.squares[0][5]);
+            longKingMove = new Move(board.squares[0][4],board.squares[0][2]);
+            longRookMove = new Move(board.squares[0][0],board.squares[0][3]);
+
+        }
+        shortCastleMove.add(shortKingMove);
+        shortCastleMove.add(shortRookMove);
+
+        longCastleMove.add(longKingMove);
+        longCastleMove.add(longRookMove);
+    }
+
     //getter
     public ArrayList<Move> getListOfPossibleMoves() {
         return listOfPossibleMoves;

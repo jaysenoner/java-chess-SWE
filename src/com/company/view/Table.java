@@ -6,6 +6,7 @@ import com.company.model.Square;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
+import java.util.ArrayList;
 
 public class Table {
     private final JFrame chessFrame;
@@ -111,16 +112,6 @@ public class Table {
 
 
     }
-    public void repaintAll(GameModel gameModel){
-        Square[][] squares = gameModel.getBoard().getSquares();
-        for(Square[] ss : squares){
-            for(Square s: ss){
-                s.repaint();
-            }
-
-        }
-    }
-
     public void repaintChessBoard(GameModel gameModel){
         Square[][] squares = gameModel.getBoard().getSquares();
         for(Square[] ss : squares){
@@ -135,9 +126,17 @@ public class Table {
             }
         }
     }
+    //TODO: Problema enorme con mosse legali.
+    // se faccio ArrayList<Move> legalMoves = s.getPiece().getPossibleMoves(); allora funziona tutto(catture, mosse corrette ecc)
+    // Mettendo il filterlegalMoves non funziona più niente che riguardi pedoni( e non solo )
 
-    public void renderGrayPossibleEndSquares(Square s) {
-            for(Move move : s.getPiece().getPossibleMoves()){
+    public void renderGrayPossibleEndSquares(Square s, GameModel gameModel) {
+            s.getPiece().setPossibleMoves(gameModel.getBoard());
+
+            ArrayList<Move> legalMoves = gameModel.filterLegalMoves(s.getPiece().getPossibleMoves());
+            //ArrayList<Move> legalMoves = s.getPiece().getPossibleMoves();
+            //TODO: JHIDCBFQERIU
+            for(Move move : legalMoves){
                 move.getEndSquare().setBackground(Color.DARK_GRAY);
                 move.getEndSquare().setEnabled(true);
             }

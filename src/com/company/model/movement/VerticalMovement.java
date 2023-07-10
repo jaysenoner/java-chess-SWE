@@ -25,7 +25,7 @@ public class VerticalMovement extends Movement {
 
         boolean stop = false;
         int i = startPosition.getRow();
-        int col = startPosition.getRow();
+        int col = startPosition.getCol();
         while (!stop) {
             i++;
             Move move = new Move(startSquare, chessBoard.getSquare(i, col));

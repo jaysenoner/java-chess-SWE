@@ -63,7 +63,7 @@ public class Controller implements ActionListener {
 
     public boolean isLongCastlingPossible(){
         Player currentPlayer = gameModel.getTurn();
-        boolean castle = !currentPlayer.getKing().HasMoved() && !currentPlayer.getShortCastleRook().HasMoved();
+        boolean castle = !currentPlayer.getKing().HasMoved() && !currentPlayer.getLongCastleRook().HasMoved();
         if(currentPlayer.isWhite())
         {
             return castle && (!squares[7][1].isOccupied() && !squares[7][2].isOccupied() && !squares[7][3].isOccupied());
@@ -73,66 +73,14 @@ public class Controller implements ActionListener {
         }
     }
 
-    //controllo se il proprio re è sotto scacco
-    public boolean kingIsChecked(){
-        if (gameModel.getTurn().isWhite()) {
-            for (Move m : gameModel.getBlackPlayer().getListOfPossibleMoves()) {
-                if (m.getEndSquare().getPiece().getClass() == King.class) {
-                    gameModel.getTurn().getKing().setChecked(true);
-                    return true;
-                }
-            }
-        }else{
-            for (Move m : gameModel.getWhitePlayer().getListOfPossibleMoves()) {
-                if (m.getEndSquare().getPiece().getClass() == King.class) {
-                    gameModel.getTurn().getKing().setChecked(true);
-                    return true;
-                }
-            }
-        }
-            return false;
-    }
-    //controllo se siamo in scacco matto
-    public boolean kingIsCheckMated(){
-       return(kingIsChecked() && gameModel.getTurn().getKing().getPossibleMoves().isEmpty());
-    }
-
-
-    // dato un pezzo controllo se muovendolo metto sotto scacco il re, se così fosse rimuovo quella mossa
-    //dalle mosse possibili.
-    public void checkPiecesMovement(Piece piece){
-        ArrayList<Move> illegalMovement= new ArrayList<>();
-        for(Move m: piece.getPossibleMoves()) {
-            //try movement
-            gameModel.getBoard().updateBoard(m);
-            if(kingIsChecked()){
-                illegalMovement.add(m);
-            }
-            Move reverseMove = new Move(m.getEndSquare(), m.getStartSquare());
-            gameModel.getBoard().updateBoard(reverseMove);
-        }
-        for(Move m : illegalMovement) {
-            piece.getPossibleMoves().remove(m);
-        }
-    }
 
     //TODO: ESTENDERE CLASSE OBSERVER E FARE OVERRIDE DI UPDATE
     public void updatePossibleEndSquares(Square s) {
         if(s.getPiece() != null){
-            //checkPiecesMovement(s.getPiece());
             table.resetGraySquares(gameModel);
-            table.renderGrayPossibleEndSquares(s);
+            table.renderGrayPossibleEndSquares(s, gameModel);
         }
 
-        /*
-        if(s.getBackground() == Color.DARK_GRAY){
-            end = s;
-            Move move = new Move(start, end);
-            gameModel.executeMove(move);
-
-        }
-
-         */
     }
 
 
@@ -142,30 +90,26 @@ public class Controller implements ActionListener {
         Object source = e.getSource();
         //Controllo se è stato premuto un quadrato nella scacchiera
         if (source.getClass() == Square.class) {
-            if (((Square) source).getBackground() != Color.DARK_GRAY) {
+
+            if (((Square) source).getBackground() != Color.DARK_GRAY &&((Square) source).getPiece() != null) {
                 currentStartSquare = (Square) source;
                 updatePossibleEndSquares(currentStartSquare);
             } else if (((Square) source).getBackground() == Color.DARK_GRAY) {
                 currentEndSquare = (Square) source;
-                gameModel.executeMove(new Move(currentStartSquare, currentEndSquare));
+                Move moveToExecute = new Move(currentStartSquare,currentEndSquare);
+                System.out.println(moveToExecute.getMoveInChessNotation());
+                gameModel.executeMove(moveToExecute);
                 table.repaintChessBoard(gameModel);
+
+                /*
+                if(gameModel.kingIsCheckMated()){
+                    //Genera alert sulla table con scritto (Bianco vince) o (nero vince)
+                }
+
+                 */
 
             }
         }
     }
 
-    public void setupGameLoop(){
-        gameLoop = new Thread(()->{
-            while(isRunning){
-
-                //TODO:QUI CALCOLO TUTTE LE MOSSE LEGALI,E ASPETTO MOSSA DEL GIOCATORE DI TURNO
-
-                //TODO:DOPO AVER RICEVUTO LA MOSSA,FACCIO UPDATE BOARD
-
-                //TODO: ADESSO RIDISEGNO LA VIEW IN BASE ALLE MODIFICHE SULLA BOARD
-
-            }
-
-        });
-    }
 }
