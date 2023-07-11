@@ -21,6 +21,11 @@ public class Pawn extends Piece{
     }
 
     @Override
+    public Piece copy() {
+        return (Pawn) super.copy();
+    }
+
+    @Override
     public String getRightLetterForChessNotation() {
         return "";
     }

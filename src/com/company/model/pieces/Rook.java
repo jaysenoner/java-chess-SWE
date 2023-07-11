@@ -23,6 +23,11 @@ public class Rook extends Piece{
     }
 
     @Override
+    public Piece copy() {
+        return (Rook) super.copy();
+    }
+
+    @Override
     public String getRightLetterForChessNotation() {
         return "R";
     }

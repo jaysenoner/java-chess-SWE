@@ -18,6 +18,11 @@ public class Knight extends Piece{
     }
 
     @Override
+    public Piece copy() {
+        return (Knight) super.copy();
+    }
+
+    @Override
     public String getRightLetterForChessNotation() {
         return "N";
     }

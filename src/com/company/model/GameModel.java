@@ -5,6 +5,7 @@ import com.company.model.pieces.King;
 import com.company.model.pieces.Piece;
 import com.company.view.Table;
 
+
 import java.util.ArrayList;
 
 enum GameState{START, INPLAY, CHECK, CHECKMATE, TIE}
@@ -31,6 +32,7 @@ public class GameModel{
 
 
         //TODO: controllare game controller e observer
+
     }
 
     //getter
@@ -81,8 +83,10 @@ public class GameModel{
         board.updateBoard(move);
         changeTurn();
         if(state == GameState.START){
-            state= GameState.INPLAY;
+            state = GameState.INPLAY;
         }
+        blackPlayer.calculateAllPossibleMoves();
+        whitePlayer.calculateAllPossibleMoves();
     }
 
     public void printMovesDone(){
@@ -94,24 +98,58 @@ public class GameModel{
     //TODO: metodo problematico
     public ArrayList<Move> filterLegalMoves(ArrayList<Move> possibleMoves){
         ArrayList<Move> illegalMovement= new ArrayList<>();
-        for(Move m: possibleMoves) {
+        for(Move move: possibleMoves) {
             //try movement
-            this.getBoard().updateBoard(m);
+            Piece pieceToReinsert = this.getBoard().simulateMoveOnBoard(move);
+            if(pieceToReinsert != null){
+                if(pieceToReinsert.getColor()==Color.WHITE){
+                    whitePlayer.getListOfPieces().remove(pieceToReinsert);
+                }
+                else{
+                    blackPlayer.getListOfPieces().remove(pieceToReinsert);
+                }
+            }
             if(kingIsChecked()){
+                illegalMovement.add(move);
+            }
+            /*if(!isLegalMove(m)){
                 illegalMovement.add(m);
             }
+
             Move reverseMove = new Move(m.getEndSquare(), m.getStartSquare());
             this.getBoard().updateBoard(reverseMove);
 
+             */
+            if(pieceToReinsert != null){
+                if(pieceToReinsert.getColor()==Color.WHITE){
+                    whitePlayer.getListOfPieces().add(pieceToReinsert);
+                }
+                else{
+                    blackPlayer.getListOfPieces().add(pieceToReinsert);
+                }
+            }
+            this.getBoard().reverseSimulatedMove(move, pieceToReinsert);
         }
-
-
-
         for(Move m : illegalMovement) {
             possibleMoves.remove(m);
         }
         return possibleMoves;
     }
+/*
+    public boolean isLegalMove(Move m){
+        simulo la mossa
+        Board simulatedBoard= board;
+        simulatedBoard.updateBoard(m);
+
+        this.getBoard().updateBoard(m);
+
+        if(kingIsChecked()){
+            return false;
+        }
+        else{
+            return true;
+        }
+    }*/
 
     //Calcolo tutte le mosse possibili del player avversario per determinare se esiste una mossa che attacca direttamente
     // il re del player corrente
@@ -119,9 +157,7 @@ public class GameModel{
         if (this.turn.isWhite()) {
             this.blackPlayer.calculateAllPossibleMoves();
             for (Move move : this.blackPlayer.getListOfPossibleMoves()) {
-                if(move.getEndSquare().getPiece() != null)
-                if (move.getEndSquare().getPiece().getClass() == King.class) {
-                    //this.whitePlayer.getKing().setChecked(true);
+                if (move.getEndSquare().getPiece() != null && move.getEndSquare().getPiece().getClass() == King.class) {
                     return true;
                 }
             }
@@ -130,7 +166,6 @@ public class GameModel{
             for (Move move : this.getWhitePlayer().getListOfPossibleMoves()) {
                 if(move.getEndSquare().getPiece() != null)
                 if (move.getEndSquare().getPiece().getClass() == King.class) {
-                    //this.getTurn().getKing().setChecked(true);
                     return true;
                 }
             }

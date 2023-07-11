@@ -8,7 +8,7 @@ import java.util.ArrayList;
 public class Player {
     private String name = "";
     private final Color color;
-    private final Board board;
+    private Board board;
     private ArrayList<Move> listOfPossibleMoves;
     private ArrayList<Piece> listOfPieces;
     private Piece king;

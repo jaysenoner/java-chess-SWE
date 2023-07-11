@@ -25,6 +25,18 @@ class BoardTest {
     }
 
     @Test
+    void deepCopyPieceTest(){
+        Piece originalPiece = b.squares[1][0].getPiece();
+        Piece copiedPiece = b.squares[1][0].getPiece().copy();
+        assertEquals(originalPiece.getClass(), copiedPiece.getClass());
+        assertEquals(originalPiece.getColor(), copiedPiece.getColor());
+        assertEquals(originalPiece.getPosition().getRow(), copiedPiece.getPosition().getRow());
+        assertEquals(originalPiece.getPosition().getCol(), copiedPiece.getPosition().getCol());
+        assertEquals(originalPiece.getPossibleMoves(), copiedPiece.getPossibleMoves());
+        assertEquals(originalPiece.getListOfMovementRules(), copiedPiece.getListOfMovementRules());
+
+    }
+    @Test
     void allColorsShouldBeCorrect(){
 
         for(int i = 0; i < 8 ; i++)

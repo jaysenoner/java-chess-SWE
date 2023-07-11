@@ -25,6 +25,11 @@ public class Queen extends Piece{
     }
 
     @Override
+    public Piece copy() {
+        return (Queen) super.copy();
+    }
+
+    @Override
     public String getRightLetterForChessNotation() {
         return "Q";
     }

@@ -31,12 +31,7 @@ public class Controller implements ActionListener {
         gameModel = new GameModel();
         table = new Table();
         squares = gameModel.getBoard().squares;
-
-        /*table.renderMenuBar();
-        table.renderChessBoard(gameModel);
-         */
         table.initializeView(gameModel);
-
         //Setup listeners
         table.getPgn().addActionListener(this);
         table.getNewGame().addActionListener(this);
@@ -97,7 +92,7 @@ public class Controller implements ActionListener {
             } else if (((Square) source).getBackground() == Color.DARK_GRAY) {
                 currentEndSquare = (Square) source;
                 Move moveToExecute = new Move(currentStartSquare,currentEndSquare);
-                System.out.println(moveToExecute.getMoveInChessNotation());
+                //System.out.println(moveToExecute.getMoveInChessNotation());
                 gameModel.executeMove(moveToExecute);
                 table.repaintChessBoard(gameModel);
 

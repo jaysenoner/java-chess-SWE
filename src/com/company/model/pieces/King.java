@@ -26,6 +26,13 @@ public class King extends Piece{
     }
 
     @Override
+    public Piece copy() {
+        King clone = (King) super.copy();
+        clone.isChecked = this.isChecked;
+        return clone;
+    }
+
+    @Override
     public String getRightLetterForChessNotation() {
         return "K";
     }

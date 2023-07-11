@@ -94,6 +94,9 @@ public class Table {
                 String image = "";
                 if(s.getPiece() != null) {
                     image = s.getPiece().getImageURL();
+                    if(s.getPiece().getColor() == com.company.model.Color.BLACK){
+                        s.setEnabled(false);
+                    }
                 }else{
                     s.setEnabled(false);
                 }
@@ -119,6 +122,11 @@ public class Table {
                 String image = "";
                 if(s.getPiece() != null) {
                     image = s.getPiece().getImageURL();
+                    if((gameModel.getTurn().isWhite() && s.getPiece().getColor()== com.company.model.Color.BLACK) || (!gameModel.getTurn().isWhite() && s.getPiece().getColor()== com.company.model.Color.WHITE)){
+                        s.setEnabled(false);
+                    }else{
+                        s.setEnabled(true);
+                    }
                 }else{
                     s.setEnabled(false);
                 }
@@ -135,7 +143,7 @@ public class Table {
 
             ArrayList<Move> legalMoves = gameModel.filterLegalMoves(s.getPiece().getPossibleMoves());
             //ArrayList<Move> legalMoves = s.getPiece().getPossibleMoves();
-            //TODO: JHIDCBFQERIU
+
             for(Move move : legalMoves){
                 move.getEndSquare().setBackground(Color.DARK_GRAY);
                 move.getEndSquare().setEnabled(true);

@@ -17,6 +17,11 @@ public class Bishop extends Piece {
     }
 
     @Override
+    public Piece copy() {
+        return  (Bishop) super.copy();
+    }
+
+    @Override
     public String getRightLetterForChessNotation() {
         return "B";
     }

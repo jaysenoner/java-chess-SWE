@@ -5,13 +5,18 @@ import com.company.model.movement.Movement;
 
 import java.util.ArrayList;
 
-public abstract class Piece {
+public abstract class Piece implements Cloneable {
     private boolean captured = false;
     private Color color;
-    private boolean hasMoved = false;       //TODO: Controllare se questi attributi sono modificati correttamente nei vari metodi che lo dovno fare
+    private boolean hasMoved = false;
     private boolean firstMove= true;
     private Coordinate position;
     protected String imageURL;
+
+    public ArrayList<Movement> getListOfMovementRules() {
+        return listOfMovementRules;
+    }
+
     protected ArrayList<Movement> listOfMovementRules;
     protected ArrayList<Move> possibleMoves;
 
@@ -21,6 +26,19 @@ public abstract class Piece {
         possibleMoves= new ArrayList<>();
         listOfMovementRules = new ArrayList<>();
 
+    }
+
+    public Piece copy() {
+        try {
+            Piece clone = (Piece) super.clone();
+            clone.listOfMovementRules = new ArrayList<>(this.listOfMovementRules);
+            clone.possibleMoves = new ArrayList<>(this.possibleMoves);
+            clone.position = new Coordinate(this.position.getRow(), this.position.getCol());
+            return clone;
+        } catch (CloneNotSupportedException e) {
+            // This should never happen since Piece implements Cloneable
+            throw new AssertionError();
+        }
     }
 
     public boolean isCaptured() {

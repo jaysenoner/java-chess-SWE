@@ -3,7 +3,7 @@ package com.company.model;
 import com.company.model.pieces.Piece;
 
 import javax.swing.*;
-
+//TODO: DAVVERO SQUARE ESTENDE IL BOTTONE??
 public class Square extends JButton {
     private final Coordinate position;
     private Boolean occupied = false;
@@ -17,6 +17,7 @@ public class Square extends JButton {
         this.position = position;
         this.color= color;
     }
+
     public boolean isOccupied() {
         return occupied;
     }
