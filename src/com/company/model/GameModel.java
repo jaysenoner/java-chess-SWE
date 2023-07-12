@@ -8,7 +8,7 @@ import com.company.view.Table;
 
 import java.util.ArrayList;
 
-enum GameState{START, INPLAY, CHECK, CHECKMATE, TIE}
+enum GameState{START, INPLAY, CHECK, CHECKMATE, STALEMATE}
 public class GameModel{
     private final Player whitePlayer;
     private final Player blackPlayer;
@@ -16,10 +16,6 @@ public class GameModel{
     private final Board board;
     private ArrayList<String> movesDone;
     private GameState state;
-    public Controller gameController;
-
-
-
 
 
     public GameModel() {
@@ -29,9 +25,6 @@ public class GameModel{
         this.turn = whitePlayer ;
         this.movesDone = new ArrayList<>();
         this.state = GameState.START;
-
-
-        //TODO: controllare game controller e observer
 
     }
 
@@ -66,13 +59,13 @@ public class GameModel{
         if(turn.isWhite()){
             turn = blackPlayer;
         }else turn = whitePlayer;
-       // turn.calculateAllPossibleMoves();
     }
 
 
     //metodo che data una mossa legale aggiorna la lista dei pezzi in caso di cattura e aggiorna la scacchiera e cambia il turno
     public void executeMove(Move move){
         if(move.getEndSquare().isOccupied()){
+            move.getEndSquare().getPiece().setCaptured();
             if(turn.isWhite()){
                 blackPlayer.getListOfPieces().remove(move.getEndSquare().getPiece());
             }else{
@@ -95,7 +88,6 @@ public class GameModel{
         }
     }
 
-    //TODO: metodo problematico
     public ArrayList<Move> filterLegalMoves(ArrayList<Move> possibleMoves){
         ArrayList<Move> illegalMovement= new ArrayList<>();
         for(Move move: possibleMoves) {
@@ -112,14 +104,7 @@ public class GameModel{
             if(kingIsChecked()){
                 illegalMovement.add(move);
             }
-            /*if(!isLegalMove(m)){
-                illegalMovement.add(m);
-            }
 
-            Move reverseMove = new Move(m.getEndSquare(), m.getStartSquare());
-            this.getBoard().updateBoard(reverseMove);
-
-             */
             if(pieceToReinsert != null){
                 if(pieceToReinsert.getColor()==Color.WHITE){
                     whitePlayer.getListOfPieces().add(pieceToReinsert);
@@ -135,21 +120,6 @@ public class GameModel{
         }
         return possibleMoves;
     }
-/*
-    public boolean isLegalMove(Move m){
-        simulo la mossa
-        Board simulatedBoard= board;
-        simulatedBoard.updateBoard(m);
-
-        this.getBoard().updateBoard(m);
-
-        if(kingIsChecked()){
-            return false;
-        }
-        else{
-            return true;
-        }
-    }*/
 
     //Calcolo tutte le mosse possibili del player avversario per determinare se esiste una mossa che attacca direttamente
     // il re del player corrente
@@ -158,6 +128,7 @@ public class GameModel{
             this.blackPlayer.calculateAllPossibleMoves();
             for (Move move : this.blackPlayer.getListOfPossibleMoves()) {
                 if (move.getEndSquare().getPiece() != null && move.getEndSquare().getPiece().getClass() == King.class) {
+                    state = GameState.CHECK;
                     return true;
                 }
             }
@@ -166,17 +137,41 @@ public class GameModel{
             for (Move move : this.getWhitePlayer().getListOfPossibleMoves()) {
                 if(move.getEndSquare().getPiece() != null)
                 if (move.getEndSquare().getPiece().getClass() == King.class) {
+                    state = GameState.CHECK;
                     return true;
                 }
             }
         }
+        state= GameState.INPLAY;
         return false;
     }
 
     public boolean kingIsCheckMated(){
-        return(kingIsChecked() && this.getTurn().getKing().getPossibleMoves().isEmpty());
+        if(kingIsChecked() && filterLegalMoves(this.getTurn().getListOfPossibleMoves()).isEmpty()){
+            state = GameState.CHECKMATE;
+            return true;
+        }else{
+            state = GameState.INPLAY;
+            return false;
+        }
+    }
+
+    public boolean isStaleMate(){
+        if(!kingIsChecked() && filterLegalMoves(this.getTurn().getListOfPossibleMoves()).isEmpty()){
+            state= GameState.STALEMATE;
+            return true;
+        }else{
+            state = GameState.INPLAY;
+            return false;
+        }
+
     }
 
 
 
 }
+
+//TODO: implementare promozione
+//TODO: implementare tasti new game e download pgn
+//TODO: testare stallo
+//TODO: finire arrocco (decidere se metterlo tra i movimenti possibili)

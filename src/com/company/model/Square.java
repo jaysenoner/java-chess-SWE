@@ -31,7 +31,7 @@ public class Square extends JButton {
             this.occupied = true;
             piece.setPosition(position);
         }else{
-            occupied=false;
+            this.occupied=false;
         }
     }
 

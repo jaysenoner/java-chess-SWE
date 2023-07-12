@@ -12,20 +12,13 @@ public abstract class Piece implements Cloneable {
     private boolean firstMove= true;
     private Coordinate position;
     protected String imageURL;
-
-    public ArrayList<Movement> getListOfMovementRules() {
-        return listOfMovementRules;
-    }
-
     protected ArrayList<Movement> listOfMovementRules;
     protected ArrayList<Move> possibleMoves;
-
 
     public Piece(Color color) {
         this.color= color;
         possibleMoves= new ArrayList<>();
         listOfMovementRules = new ArrayList<>();
-
     }
 
     public Piece copy() {
@@ -41,6 +34,9 @@ public abstract class Piece implements Cloneable {
         }
     }
 
+    public ArrayList<Movement> getListOfMovementRules() {
+        return listOfMovementRules;
+    }
     public boolean isCaptured() {
         return captured;
     }

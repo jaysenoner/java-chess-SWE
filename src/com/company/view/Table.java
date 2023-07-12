@@ -16,9 +16,6 @@ public class Table {
     private JMenuBar menuBar;
     private JMenu pgn;
     private JMenu newGame;
-    private JButton[][] chessBoard;
-
-
 
     public JMenu getPgn() {
         return pgn;
@@ -113,7 +110,6 @@ public class Table {
         }
         chessBoardPanel.setVisible(true);
 
-
     }
     public void repaintChessBoard(GameModel gameModel){
         Square[][] squares = gameModel.getBoard().getSquares();
@@ -134,16 +130,9 @@ public class Table {
             }
         }
     }
-    //TODO: Problema enorme con mosse legali.
-    // se faccio ArrayList<Move> legalMoves = s.getPiece().getPossibleMoves(); allora funziona tutto(catture, mosse corrette ecc)
-    // Mettendo il filterlegalMoves non funziona più niente che riguardi pedoni( e non solo )
 
     public void renderGrayPossibleEndSquares(Square s, GameModel gameModel) {
-            s.getPiece().setPossibleMoves(gameModel.getBoard());
-
             ArrayList<Move> legalMoves = gameModel.filterLegalMoves(s.getPiece().getPossibleMoves());
-            //ArrayList<Move> legalMoves = s.getPiece().getPossibleMoves();
-
             for(Move move : legalMoves){
                 move.getEndSquare().setBackground(Color.DARK_GRAY);
                 move.getEndSquare().setEnabled(true);
@@ -164,4 +153,25 @@ public class Table {
         }
     }
 
+    public void showStaleMateAlert() {
+        JOptionPane.showMessageDialog(chessFrame, "STALEMATE!");
+    }
+    public void showCheckMateAlert(Color winner) {
+        String text= "CHECKMATE!";
+        if(winner == Color.WHITE){
+            text= text + " White player wins!";
+        }
+        else{
+            text = text + " Black player wins!";
+        }
+        JOptionPane.showMessageDialog(chessFrame, text);
+    }
+
+    public void stopGame(GameModel gameModel) {
+        for(Square[] squares: gameModel.getBoard().getSquares()){
+            for(Square square: squares){
+                square.setEnabled(false);
+            }
+        }
+    }
 }

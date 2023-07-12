@@ -21,9 +21,6 @@ public class Controller implements ActionListener {
     private Square currentStartSquare;
     private Square currentEndSquare;
 
-    private Thread gameLoop;
-    private boolean isRunning;
-
 
 
     public Controller() {
@@ -42,6 +39,8 @@ public class Controller implements ActionListener {
                 square.addActionListener(this);
             }
         }
+        gameModel.getWhitePlayer().calculateAllPossibleMoves();
+        gameModel.getBlackPlayer().calculateAllPossibleMoves();
     }
 
     public boolean isShortCastlingPossible(){
@@ -78,8 +77,6 @@ public class Controller implements ActionListener {
 
     }
 
-
-    //TODO: Diversificare le azioni
     @Override
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
@@ -89,20 +86,28 @@ public class Controller implements ActionListener {
             if (((Square) source).getBackground() != Color.DARK_GRAY &&((Square) source).getPiece() != null) {
                 currentStartSquare = (Square) source;
                 updatePossibleEndSquares(currentStartSquare);
-            } else if (((Square) source).getBackground() == Color.DARK_GRAY) {
+            }
+            else if (((Square) source).getBackground() == Color.DARK_GRAY) {
+
                 currentEndSquare = (Square) source;
                 Move moveToExecute = new Move(currentStartSquare,currentEndSquare);
                 //System.out.println(moveToExecute.getMoveInChessNotation());
                 gameModel.executeMove(moveToExecute);
                 table.repaintChessBoard(gameModel);
 
-                /*
                 if(gameModel.kingIsCheckMated()){
-                    //Genera alert sulla table con scritto (Bianco vince) o (nero vince)
+                    table.stopGame(gameModel);
+                    if (gameModel.getTurn().isWhite()){
+                        table.showCheckMateAlert(Color.BLACK);
+                    }else{
+                        table.showCheckMateAlert(Color.WHITE);
+                    }
                 }
 
-                 */
-
+                if(gameModel.isStaleMate()){
+                    table.showStaleMateAlert();
+                    table.stopGame(gameModel);
+                }
             }
         }
     }

@@ -66,8 +66,6 @@ public class Board {
 
     }
 
-
-
     public boolean addPiece(Square s, Piece p){
         if(s.isOccupied()){
             return false;
@@ -77,6 +75,12 @@ public class Board {
             return true;
             }
     }
+
+    public void removePiece(Square s){
+        s.setPiece(null);
+        s.setOccupied(false);
+    }
+
     public Square getSquare(Coordinate pos){
         return squares[pos.getRow()][pos.getCol()];
     }
@@ -94,7 +98,6 @@ public class Board {
         p.setHasMoved();
         move.getStartSquare().setPiece(null);
         move.getEndSquare().setPiece(p);
-        p.setPosition(move.getEndSquare().getPosition());
     }
 
     public Piece simulateMoveOnBoard(Move moveToSimulate){
@@ -102,13 +105,12 @@ public class Board {
         Piece pieceToMove = moveToSimulate.getStartSquare().getPiece();
 
         if(moveToSimulate.getEndSquare().getPiece() != null){
-             pieceToReInsert = moveToSimulate.getEndSquare().getPiece().copy();
+             pieceToReInsert = moveToSimulate.getEndSquare().getPiece();
 
         }
 
         moveToSimulate.getEndSquare().setPiece(pieceToMove);
         moveToSimulate.getStartSquare().setPiece(null);
-        pieceToMove.setPosition(moveToSimulate.getEndSquare().getPosition());
         return pieceToReInsert;
     }
     public void reverseSimulatedMove(Move moveToSimulate, Piece pieceToReinsert){
@@ -116,9 +118,8 @@ public class Board {
         Piece pieceToMove = reverseMove.getStartSquare().getPiece();
         reverseMove.getEndSquare().setPiece(pieceToMove);
         reverseMove.getStartSquare().setPiece(pieceToReinsert);
-        pieceToMove.setPosition(reverseMove.getEndSquare().getPosition());
-        if(pieceToReinsert != null)
-            pieceToReinsert.setPosition(reverseMove.getStartSquare().getPosition());
+        //moveToSimulate.getStartSquare().setPiece(moveToSimulate.getEndSquare().getPiece());
+        //moveToSimulate.getEndSquare().setPiece(pieceToReinsert);
     }
 
 

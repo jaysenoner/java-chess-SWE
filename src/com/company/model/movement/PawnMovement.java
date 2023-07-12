@@ -6,8 +6,8 @@ import com.company.model.movement.Movement;
 import java.util.ArrayList;
 
 public class PawnMovement extends Movement {
-    /* metodo che restituisce un array con tutte le mosse possibili che il pedono può fare data la sua posizione iniziale.
-     * TODO:aggiungere enpassant*/
+    // metodo che restituisce un array con tutte le mosse possibili che il pedone può fare data la sua posizione iniziale.
+    //TODO:aggiungere enpassant
     @Override
     public ArrayList<Move> getMovesFromMovementRule(Coordinate startPosition, Board chessBoard) {
         ArrayList<Move> listOfMove = new ArrayList<>();
