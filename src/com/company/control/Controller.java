@@ -76,6 +76,8 @@ public class Controller implements ActionListener {
 
 
     //TODO: ESTENDERE CLASSE OBSERVER E FARE OVERRIDE DI UPDATE
+    //TODO: secondo me (Sara) alla table non va mandato il game model ma solo le componenti che gli servono
+    // per mantenere la separazione tra le parti
     public void updatePossibleEndSquares(Square s) {
         if(s.getPiece() != null){
             table.resetGraySquares(gameModel);
