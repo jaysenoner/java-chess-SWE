@@ -5,13 +5,16 @@ import com.company.model.GameModel;
 import com.company.model.Move;
 import com.company.model.Player;
 import com.company.model.Square;
-import com.company.model.pieces.King;
-import com.company.model.pieces.Piece;
 import com.company.view.Table;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class Controller implements ActionListener {
@@ -30,6 +33,12 @@ public class Controller implements ActionListener {
         squares = gameModel.getBoard().squares;
         table.initializeView(gameModel);
         //Setup listeners
+        addListeners();
+        gameModel.getWhitePlayer().calculateAllPossibleMoves();
+        gameModel.getBlackPlayer().calculateAllPossibleMoves();
+    }
+
+    private void addListeners(){
         table.getPgn().addActionListener(this);
         table.getNewGame().addActionListener(this);
         for(Square[] row: squares)
@@ -39,8 +48,6 @@ public class Controller implements ActionListener {
                 square.addActionListener(this);
             }
         }
-        gameModel.getWhitePlayer().calculateAllPossibleMoves();
-        gameModel.getBlackPlayer().calculateAllPossibleMoves();
     }
 
     public boolean isShortCastlingPossible(){
@@ -76,6 +83,43 @@ public class Controller implements ActionListener {
         }
 
     }
+    private void startNewGame(){
+        gameModel = new GameModel();
+        JFrame frame = table.getChessFrame();
+        frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
+
+        table = new Table();
+        squares = gameModel.getBoard().squares;
+        table.initializeView(gameModel);
+        //Setup listeners
+        addListeners();
+        gameModel.getWhitePlayer().calculateAllPossibleMoves();
+        gameModel.getBlackPlayer().calculateAllPossibleMoves();
+    }
+
+    private void generatePGNFile(){
+        ArrayList<String> movesInPGN = gameModel.getMovesInPgn();
+        try {
+            File pgnFile = new File("chess_game.pgn");
+            if(pgnFile.createNewFile()){
+                System.out.println("File pgn creato con successo");
+            }
+            else{
+                System.out.println("File già esistente, il file verrà sovrascritto");
+            }
+            FileWriter writer = new FileWriter("chess_game.pgn");
+            for(String move: movesInPGN)
+            {
+                writer.write(move + " ");
+            }
+            writer.close();
+        }
+        catch(IOException e){
+            System.out.println("Errore nella creazione del file");
+            e.printStackTrace();
+        }
+
+    }
 
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -102,6 +146,7 @@ public class Controller implements ActionListener {
                     }else{
                         table.showCheckMateAlert(Color.WHITE);
                     }
+
                 }
 
                 if(gameModel.isStaleMate()){
@@ -110,6 +155,20 @@ public class Controller implements ActionListener {
                 }
             }
         }
+        //Controllo se è stato premuto un bottone della ToolBar
+        if(source.getClass() == JButton.class){
+           if( ((JButton) source).getText().equals("New Game")){
+
+               startNewGame();
+           }
+           else if( ((JButton) source).getText().equals("Download PGN")){
+                System.out.println(gameModel.getMovesInPgn());
+                generatePGNFile();
+           }
+        }
     }
+
+
+
 
 }

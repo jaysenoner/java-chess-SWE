@@ -9,29 +9,31 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public class Table {
+    public JFrame getChessFrame() {
+        return chessFrame;
+    }
+
     private final JFrame chessFrame;
-    private final Dimension frameDimension = new Dimension(800, 800);
+    private final Dimension frameDimension = new Dimension(1000, 1000);
     private static final String COLS = "ABCDEFGH";
     private JPanel chessBoardPanel;
-    private JMenuBar menuBar;
-    private JMenu pgn;
-    private JMenu newGame;
 
-    public JMenu getPgn() {
+
+    private JToolBar toolBar;
+    private final JButton pgn;
+    private final JButton newGame;
+
+    public JButton getPgn() {
         return pgn;
     }
 
-    public void setPgn(JMenu pgn) {
-        this.pgn = pgn;
-    }
 
-    public JMenu getNewGame() {
+
+    public JButton getNewGame() {
         return newGame;
     }
 
-    public void setNewGame(JMenu newGame) {
-        this.newGame = newGame;
-    }
+
 
 
 
@@ -40,20 +42,23 @@ public class Table {
         this.chessFrame.setSize(frameDimension);
         this.chessFrame.setVisible(true);
 
-        this.menuBar = new JMenuBar();
-        this.newGame = new JMenu("New Game");
-        this.pgn = new JMenu("Download PGN");
-        chessFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.toolBar = new JToolBar();
+        this.newGame = new JButton("New Game");
+        this.pgn = new JButton("Download PGN");
+        chessFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     }
 
 
-    public void renderMenuBar() {
-        menuBar.add(newGame);
-        menuBar.add(pgn);
-
+    public void renderToolBar() {
+        toolBar.add(newGame);
+        toolBar.add(pgn);
+        newGame.setEnabled(true);
+        pgn.setEnabled(true);
+        toolBar.setRollover(true);
+        toolBar.setFloatable(false);
         // Text Area at the Center
         JTextArea ta = new JTextArea("Java Chess Game created by Jay Senoner and Sara Bernini");
-        chessFrame.getContentPane().add(BorderLayout.NORTH, menuBar);
+        chessFrame.getContentPane().add(BorderLayout.NORTH, toolBar);
         chessFrame.getContentPane().add(BorderLayout.SOUTH, ta);
         chessFrame.setVisible(true);
     }
@@ -61,7 +66,7 @@ public class Table {
 
 
     public void initializeView(GameModel gameModel){
-        renderMenuBar();
+        renderToolBar();
         renderChessBoardPanel(gameModel);
     }
 
@@ -80,6 +85,7 @@ public class Table {
 
     }
 
+
     public void renderChessBoard(GameModel gameModel){
         Square[][] squares = gameModel.getBoard().getSquares();
         Insets buttonMargin = new Insets(0,0,0,0);
@@ -89,16 +95,19 @@ public class Table {
             for(Square s: ss){
                 s.setMargin(buttonMargin);
                 String image = "";
+
                 if(s.getPiece() != null) {
                     image = s.getPiece().getImageURL();
                     if(s.getPiece().getColor() == com.company.model.Color.BLACK){
                         s.setEnabled(false);
                     }
-                }else{
+                }
+                else{
                     s.setEnabled(false);
                 }
                 ImageIcon icon = new ImageIcon(image);
                 s.setIcon(icon);
+
                 if(s.getColor() == com.company.model.Color.WHITE){
                     s.setBackground(Color.WHITE);
                 }else{
@@ -118,13 +127,13 @@ public class Table {
                 String image = "";
                 if(s.getPiece() != null) {
                     image = s.getPiece().getImageURL();
-                    if((gameModel.getTurn().isWhite() && s.getPiece().getColor()== com.company.model.Color.BLACK) || (!gameModel.getTurn().isWhite() && s.getPiece().getColor()== com.company.model.Color.WHITE)){
-                        s.setEnabled(false);
-                    }else{
-                        s.setEnabled(true);
-                    }
+                    s.setEnabled((!gameModel.getTurn().isWhite() || s.getPiece().getColor() != com.company.model.Color.BLACK) &&
+                            (gameModel.getTurn().isWhite() || s.getPiece().getColor() != com.company.model.Color.WHITE));
+                    s.setDisabledIcon(new ImageIcon(image)); // Aggiunto per far si che l'icona rimanga invariata disabilitando/abilitando un bottone contenente un pezzo
                 }else{
+                    s.setDisabledIcon(null);    //Se una casa non ha pezzo imposto la sua icona da disabilitato come null
                     s.setEnabled(false);
+
                 }
                 s.setIcon(new ImageIcon(image));
             }

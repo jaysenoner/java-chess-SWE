@@ -166,12 +166,28 @@ public class GameModel{
         }
 
     }
+    public ArrayList<String> getMovesInPgn(){
+        ArrayList<String> pgn = new ArrayList<>();
+        int moveNumber = 1;
+        if(movesDone.size()%2 ==0)
+        for(int i = 0; i < movesDone.size(); i+=2){
+            pgn.add(moveNumber + ". " + movesDone.get(i) + " " +movesDone.get(i+1));
+            moveNumber++;
+        }
+        else{
+            for(int i = 0; i < (movesDone.size()-1); i+=2){
+                pgn.add(moveNumber + ". " + movesDone.get(i) + " " +movesDone.get(i+1));
+                moveNumber++;
+            }
+            pgn.add( (moveNumber) + ". "+ movesDone.get(movesDone.size()-1)+ " ");
+        }
+        return pgn;
+    }
 
 
 
 }
 
 //TODO: implementare promozione
-//TODO: implementare tasti new game e download pgn
 //TODO: testare stallo
 //TODO: finire arrocco (decidere se metterlo tra i movimenti possibili)
