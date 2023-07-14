@@ -13,6 +13,15 @@ public class Player {
     private Piece king;
     private Piece shortCastleRook;
     private Piece longCastleRook;
+
+    public ArrayList<Move> getShortCastleMove() {
+        return shortCastleMove;
+    }
+
+    public ArrayList<Move> getLongCastleMove() {
+        return longCastleMove;
+    }
+
     private ArrayList<Move> shortCastleMove;
     private ArrayList<Move> longCastleMove;
 

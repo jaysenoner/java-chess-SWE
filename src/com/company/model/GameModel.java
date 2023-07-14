@@ -81,6 +81,38 @@ public class GameModel{
         blackPlayer.calculateAllPossibleMoves();
         whitePlayer.calculateAllPossibleMoves();
     }
+    //Metodo che esegue la mossa dell'arrocco.Non verifica che la mossa sia legale ne possibile.
+    public void executeCastlingMove(boolean shortCastle){
+        if(turn.isWhite()){
+            if(shortCastle){
+                board.updateBoard(whitePlayer.getShortCastleMove().get(0));
+                board.updateBoard(whitePlayer.getShortCastleMove().get(1));
+                movesDone.add("O-O");
+            }
+            else{
+                board.updateBoard(whitePlayer.getLongCastleMove().get(0));
+                board.updateBoard(whitePlayer.getLongCastleMove().get(1));
+                movesDone.add("O-O-O");
+            }
+        }
+        else {
+            if(shortCastle){
+                board.updateBoard(blackPlayer.getShortCastleMove().get(0));
+                board.updateBoard(blackPlayer.getShortCastleMove().get(1));
+                movesDone.add("O-O");
+            }
+            else{
+                board.updateBoard(blackPlayer.getLongCastleMove().get(0));
+                board.updateBoard(blackPlayer.getLongCastleMove().get(1));
+                movesDone.add("O-O-O");
+            }
+
+        }
+        changeTurn();
+        blackPlayer.calculateAllPossibleMoves();
+        whitePlayer.calculateAllPossibleMoves();
+
+    }
 
     public void printMovesDone(){
         for(String move: movesDone){
@@ -166,6 +198,36 @@ public class GameModel{
         }
 
     }
+
+
+
+    public boolean isShortCastlingPossible(){
+        Player currentPlayer = this.turn;
+        Square[][] squares = board.squares;
+        boolean castle = !currentPlayer.getKing().HasMoved() && !currentPlayer.getShortCastleRook().HasMoved();
+        if(currentPlayer.isWhite())
+        {
+            return castle && (!squares[7][6].isOccupied() && !squares[7][5].isOccupied());
+        }
+        else {
+            return castle && (!squares[0][6].isOccupied() && !squares[0][5].isOccupied());
+        }
+    }
+
+    public boolean isLongCastlingPossible(){
+        Player currentPlayer = this.turn;
+        Square[][] squares = board.squares;
+        boolean castle = !currentPlayer.getKing().HasMoved() && !currentPlayer.getLongCastleRook().HasMoved();
+        if(currentPlayer.isWhite())
+        {
+            return castle && (!squares[7][1].isOccupied() && !squares[7][2].isOccupied() && !squares[7][3].isOccupied());
+        }
+        else {
+            return castle && (!squares[0][1].isOccupied() && !squares[0][2].isOccupied() && !squares[0][3].isOccupied());
+        }
+    }
+
+
     public ArrayList<String> getMovesInPgn(){
         ArrayList<String> pgn = new ArrayList<>();
         int moveNumber = 1;

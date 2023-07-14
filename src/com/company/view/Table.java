@@ -95,7 +95,7 @@ public class Table {
             for(Square s: ss){
                 s.setMargin(buttonMargin);
                 String image = "";
-
+                s.setName("");
                 if(s.getPiece() != null) {
                     image = s.getPiece().getImageURL();
                     if(s.getPiece().getColor() == com.company.model.Color.BLACK){

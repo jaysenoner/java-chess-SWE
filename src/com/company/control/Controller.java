@@ -5,6 +5,7 @@ import com.company.model.GameModel;
 import com.company.model.Move;
 import com.company.model.Player;
 import com.company.model.Square;
+import com.company.model.pieces.King;
 import com.company.view.Table;
 
 import javax.swing.*;
@@ -50,29 +51,7 @@ public class Controller implements ActionListener {
         }
     }
 
-    public boolean isShortCastlingPossible(){
-        Player currentPlayer = gameModel.getTurn();
-        boolean castle = !currentPlayer.getKing().HasMoved() && !currentPlayer.getShortCastleRook().HasMoved();
-        if(currentPlayer.isWhite())
-        {
-            return castle && (!squares[7][6].isOccupied() && !squares[7][5].isOccupied());
-        }
-        else {
-            return castle && (!squares[0][6].isOccupied() && !squares[0][5].isOccupied());
-        }
-    }
 
-    public boolean isLongCastlingPossible(){
-        Player currentPlayer = gameModel.getTurn();
-        boolean castle = !currentPlayer.getKing().HasMoved() && !currentPlayer.getLongCastleRook().HasMoved();
-        if(currentPlayer.isWhite())
-        {
-            return castle && (!squares[7][1].isOccupied() && !squares[7][2].isOccupied() && !squares[7][3].isOccupied());
-        }
-        else {
-            return castle && (!squares[0][1].isOccupied() && !squares[0][2].isOccupied() && !squares[0][3].isOccupied());
-        }
-    }
 
 
     //TODO: ESTENDERE CLASSE OBSERVER E FARE OVERRIDE DI UPDATE
@@ -124,20 +103,50 @@ public class Controller implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
+        boolean kingClicked;
         //Controllo se è stato premuto un quadrato nella scacchiera
         if (source.getClass() == Square.class) {
 
             if (((Square) source).getBackground() != Color.DARK_GRAY &&((Square) source).getPiece() != null) {
+                kingClicked = false;
                 currentStartSquare = (Square) source;
                 updatePossibleEndSquares(currentStartSquare);
+                //Se è stato selezionato il re, controllo che l'arrocco sia possibile, e in caso affermativo coloro di grigio la casa in cui si sposterà il re
+                if(((Square) source).getPiece().getClass() == King.class){
+                    kingClicked = true;
+                    if(gameModel.isShortCastlingPossible()){    //TODO:sostituire short/longcastlingPossible con Legal
+                        Square shortCastleSquare = gameModel.getTurn().getShortCastleMove().get(0).getEndSquare();
+                        shortCastleSquare.setBackground(Color.DARK_GRAY);
+                        shortCastleSquare.setName("short_castle_square");
+                        shortCastleSquare.setEnabled(true);
+                    }
+                    if(gameModel.isLongCastlingPossible()){
+                        Square longCastleSquare = gameModel.getTurn().getLongCastleMove().get(0).getEndSquare();
+                        longCastleSquare.setBackground(Color.DARK_GRAY);
+                        longCastleSquare.setName("long_castle_square");
+                        longCastleSquare.setEnabled(true);
+
+                    }
+
+                }
             }
             else if (((Square) source).getBackground() == Color.DARK_GRAY) {
-
-                currentEndSquare = (Square) source;
-                Move moveToExecute = new Move(currentStartSquare,currentEndSquare);
-                //System.out.println(moveToExecute.getMoveInChessNotation());
-                gameModel.executeMove(moveToExecute);
-                table.repaintChessBoard(gameModel);
+                if(((Square) source).getName().equals("short_castle_square"))
+                {
+                    gameModel.executeCastlingMove(true);
+                    table.repaintChessBoard(gameModel);
+                }
+                else if(((Square) source).getName().equals("long_castle_square")){
+                    gameModel.executeCastlingMove(false);
+                    table.repaintChessBoard(gameModel);
+                }
+                else {
+                    currentEndSquare = (Square) source;
+                    Move moveToExecute = new Move(currentStartSquare, currentEndSquare);
+                    //System.out.println(moveToExecute.getMoveInChessNotation());
+                    gameModel.executeMove(moveToExecute);
+                    table.repaintChessBoard(gameModel);
+                }
 
                 if(gameModel.kingIsCheckMated()){
                     table.stopGame(gameModel);
