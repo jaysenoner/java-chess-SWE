@@ -6,6 +6,9 @@ import com.company.model.Move;
 import com.company.model.Player;
 import com.company.model.Square;
 import com.company.model.pieces.King;
+import com.company.model.pieces.Pawn;
+import com.company.model.pieces.Piece;
+import com.company.model.pieces.Queen;
 import com.company.view.Table;
 
 import javax.swing.*;
@@ -51,18 +54,12 @@ public class Controller implements ActionListener {
         }
     }
 
-
-
-
     //TODO: ESTENDERE CLASSE OBSERVER E FARE OVERRIDE DI UPDATE
-    //TODO: secondo me (Sara) alla table non va mandato il game model ma solo le componenti che gli servono
-    // per mantenere la separazione tra le parti
     public void updatePossibleEndSquares(Square s) {
         if(s.getPiece() != null){
             table.resetGraySquares(gameModel.getBoard().getSquares());
             table.renderGrayPossibleEndSquares(gameModel.filterLegalMoves(s.getPiece().getPossibleMoves()));
         }
-
     }
     private void startNewGame(){
         gameModel = new GameModel();
@@ -99,73 +96,74 @@ public class Controller implements ActionListener {
             System.out.println("Errore nella creazione del file");
             e.printStackTrace();
         }
-
     }
-
+    //metodo che controlla se l'arrocco è possibile e in caso affermativo coloro di grigio la casa in cui si sposterà
+    // il re in base al tipo di arrocco
+    public void showCastling(){
+        if(gameModel.isShortCastlingLegal()){
+            Square shortCastleSquare = gameModel.getTurn().getShortCastleMove().get(0).getEndSquare();
+            shortCastleSquare.setName("short_castle_square");
+            shortCastleSquare.setBackground(Color.DARK_GRAY);
+            shortCastleSquare.setEnabled(true);
+        }
+        if(gameModel.isLongCastlingLegal()){
+            Square longCastleSquare = gameModel.getTurn().getLongCastleMove().get(0).getEndSquare();
+            longCastleSquare.setName("long_castle_square");
+            longCastleSquare.setBackground(Color.DARK_GRAY);
+            longCastleSquare.setEnabled(true);
+        }
+    }
     @Override
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
-        boolean kingClicked;
+
         //Controllo se è stato premuto un quadrato nella scacchiera
         if (source.getClass() == Square.class) {
 
             if (((Square) source).getBackground() != Color.DARK_GRAY &&((Square) source).getPiece() != null) {
-                kingClicked = false;
                 currentStartSquare = (Square) source;
                 updatePossibleEndSquares(currentStartSquare);
-                //Se è stato selezionato il re, controllo che l'arrocco sia possibile, e in caso affermativo coloro di grigio la casa in cui si sposterà il re
+                //Se è stato selezionato il re, controllo che l'arrocco sia possibile
                 if(((Square) source).getPiece().getClass() == King.class){
-                    kingClicked = true;
-                    if(gameModel.isShortCastlingPossible()){    //TODO:sostituire short/longcastlingPossible con Legal
-                        Square shortCastleSquare = gameModel.getTurn().getShortCastleMove().get(0).getEndSquare();
-                        shortCastleSquare.setBackground(Color.DARK_GRAY);
-                        shortCastleSquare.setName("short_castle_square");
-                        shortCastleSquare.setEnabled(true);
-                    }
-                    if(gameModel.isLongCastlingPossible()){
-                        Square longCastleSquare = gameModel.getTurn().getLongCastleMove().get(0).getEndSquare();
-                        longCastleSquare.setBackground(Color.DARK_GRAY);
-                        longCastleSquare.setName("long_castle_square");
-                        longCastleSquare.setEnabled(true);
-
-                    }
-
+                    showCastling();
                 }
             }
+
             else if (((Square) source).getBackground() == Color.DARK_GRAY) {
                 if(((Square) source).getName().equals("short_castle_square"))
                 {
                     gameModel.executeCastlingMove(true);
-                    table.repaintChessBoard(gameModel);
                 }
                 else if(((Square) source).getName().equals("long_castle_square")){
                     gameModel.executeCastlingMove(false);
-                    table.repaintChessBoard(gameModel);
                 }
                 else {
                     currentEndSquare = (Square) source;
                     Move moveToExecute = new Move(currentStartSquare, currentEndSquare);
-                    //System.out.println(moveToExecute.getMoveInChessNotation());
                     gameModel.executeMove(moveToExecute);
-                    table.repaintChessBoard(gameModel);
-                }
-
-                if(gameModel.kingIsCheckMated()){
-                    table.stopGame(gameModel);
-                    if (gameModel.getTurn().isWhite()){
-                        table.showCheckMateAlert(Color.BLACK);
-                    }else{
-                        table.showCheckMateAlert(Color.WHITE);
+                    if(currentEndSquare.getPiece().getClass() == Pawn.class &&
+                            (currentEndSquare.getPosition().getRow()== 0 ||currentEndSquare.getPosition().getRow()== 7)){
+                        promotePawn(currentEndSquare);
                     }
+                }
+                table.repaintChessBoard(gameModel.getBoard().getSquares(), gameModel.getTurn().isWhite());
+                table.resetGraySquares(gameModel.getBoard().getSquares());
+                //gameModel.recalculatePossibleMove();
 
+                //contrtollo se il giocatore ha subito scacco matto, in caso arresto il gioco e stampo un alert
+                if(gameModel.kingIsCheckMated()){
+                    table.stopGame(gameModel.getBoard().getSquares());
+                    table.showCheckMateAlert(gameModel.getTurn().isWhite());
                 }
 
+                //contrtollo se siamo in stato di stallo, in caso arresto il gioco e stampo un alert
                 if(gameModel.isStaleMate()){
                     table.showStaleMateAlert();
-                    table.stopGame(gameModel);
+                    table.stopGame(gameModel.getBoard().getSquares());
                 }
             }
         }
+
         //Controllo se è stato premuto un bottone della ToolBar
         if(source.getClass() == JButton.class){
            if( ((JButton) source).getText().equals("New Game")){
@@ -179,7 +177,25 @@ public class Controller implements ActionListener {
         }
     }
 
+    private void promotePawn(Square currentEndSquare) {
+        Player playerToPromote;
+        if(gameModel.getTurn().isWhite()){
+            playerToPromote = gameModel.getBlackPlayer();
+        }else{
+            playerToPromote = gameModel.getWhitePlayer();
+        }
+        playerToPromote.getListOfPieces().remove(currentEndSquare.getPiece());
+        gameModel.getBoard().removePiece(currentEndSquare);
 
+        Piece newPiece= new Queen(playerToPromote.getKing().getColor());
+
+        gameModel.getBoard().addPiece(currentEndSquare, newPiece);
+        playerToPromote.getListOfPieces().add(newPiece);
+
+        gameModel.getBlackPlayer().calculateAllPossibleMoves();
+        gameModel.getWhitePlayer().calculateAllPossibleMoves();
+
+    }
 
 
 }

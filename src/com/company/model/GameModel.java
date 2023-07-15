@@ -201,32 +201,51 @@ public class GameModel{
 
 
 
-    public boolean isShortCastlingPossible(){
+    public boolean isShortCastlingLegal(){
         Player currentPlayer = this.turn;
         Square[][] squares = board.squares;
         boolean castle = !currentPlayer.getKing().HasMoved() && !currentPlayer.getShortCastleRook().HasMoved();
         if(currentPlayer.isWhite())
         {
+            for(Move move: blackPlayer.getListOfPossibleMoves()){
+                if(move.getEndSquare()==squares[7][6] || move.getEndSquare()==squares[7][5]){
+                    return false;
+                }
+            }
             return castle && (!squares[7][6].isOccupied() && !squares[7][5].isOccupied());
         }
         else {
+            for(Move move: whitePlayer.getListOfPossibleMoves()){
+                if(move.getEndSquare()==squares[0][6] || move.getEndSquare()==squares[0][5]){
+                    return false;
+                }
+            }
             return castle && (!squares[0][6].isOccupied() && !squares[0][5].isOccupied());
         }
     }
 
-    public boolean isLongCastlingPossible(){
+    public boolean isLongCastlingLegal(){
         Player currentPlayer = this.turn;
         Square[][] squares = board.squares;
         boolean castle = !currentPlayer.getKing().HasMoved() && !currentPlayer.getLongCastleRook().HasMoved();
         if(currentPlayer.isWhite())
         {
+            for(Move move: blackPlayer.getListOfPossibleMoves()){
+                if(move.getEndSquare()==squares[7][1] || move.getEndSquare()==squares[7][2]||move.getEndSquare()==squares[7][3]){
+                    return false;
+                }
+            }
             return castle && (!squares[7][1].isOccupied() && !squares[7][2].isOccupied() && !squares[7][3].isOccupied());
         }
         else {
+            for(Move move: whitePlayer.getListOfPossibleMoves()){
+                if(move.getEndSquare()==squares[0][1] || move.getEndSquare()==squares[0][2]||move.getEndSquare()==squares[0][3]){
+                    return false;
+                }
+            }
             return castle && (!squares[0][1].isOccupied() && !squares[0][2].isOccupied() && !squares[0][3].isOccupied());
         }
     }
-
 
     public ArrayList<String> getMovesInPgn(){
         ArrayList<String> pgn = new ArrayList<>();
@@ -247,9 +266,12 @@ public class GameModel{
     }
 
 
-
+    public void recalculatePossibleMove() {
+        blackPlayer.calculateAllPossibleMoves();
+        whitePlayer.calculateAllPossibleMoves();
+    }
 }
 
 //TODO: implementare promozione
 //TODO: testare stallo
-//TODO: finire arrocco (decidere se metterlo tra i movimenti possibili)
+

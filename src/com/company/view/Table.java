@@ -1,11 +1,15 @@
 package com.company.view;
 import com.company.model.GameModel;
 import com.company.model.Move;
+import com.company.model.Player;
 import com.company.model.Square;
+import com.company.model.pieces.Piece;
+import com.company.model.pieces.Queen;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 public class Table {
@@ -120,15 +124,14 @@ public class Table {
         chessBoardPanel.setVisible(true);
 
     }
-    public void repaintChessBoard(GameModel gameModel){
-        Square[][] squares = gameModel.getBoard().getSquares();
+    public void repaintChessBoard(Square[][] squares, Boolean isWhite){
         for(Square[] ss : squares){
             for(Square s: ss){
                 String image = "";
                 if(s.getPiece() != null) {
                     image = s.getPiece().getImageURL();
-                    s.setEnabled((!gameModel.getTurn().isWhite() || s.getPiece().getColor() != com.company.model.Color.BLACK) &&
-                            (gameModel.getTurn().isWhite() || s.getPiece().getColor() != com.company.model.Color.WHITE));
+                    s.setEnabled((!isWhite || s.getPiece().getColor() != com.company.model.Color.BLACK) &&
+                            (isWhite || s.getPiece().getColor() != com.company.model.Color.WHITE));
                     s.setDisabledIcon(new ImageIcon(image)); // Aggiunto per far si che l'icona rimanga invariata disabilitando/abilitando un bottone contenente un pezzo
                 }else{
                     s.setDisabledIcon(null);    //Se una casa non ha pezzo imposto la sua icona da disabilitato come null
@@ -163,9 +166,9 @@ public class Table {
     public void showStaleMateAlert() {
         JOptionPane.showMessageDialog(chessFrame, "STALEMATE!");
     }
-    public void showCheckMateAlert(Color winner) {
+    public void showCheckMateAlert(Boolean isWhiteWinner) {
         String text= "CHECKMATE!";
-        if(winner == Color.WHITE){
+        if(isWhiteWinner){
             text= text + " White player wins!";
         }
         else{
@@ -174,11 +177,18 @@ public class Table {
         JOptionPane.showMessageDialog(chessFrame, text);
     }
 
-    public void stopGame(GameModel gameModel) {
-        for(Square[] squares: gameModel.getBoard().getSquares()){
+    public void stopGame(Square[][] board) {
+        for(Square[] squares: board){
             for(Square square: squares){
                 square.setEnabled(false);
             }
         }
+    }
+
+    public String showPromoteAlert() {
+        String[] numbers = {"Queen", "Knight", "Bishop", "Rook"};
+        JComboBox<String> comboBox = new JComboBox<>(numbers);
+        comboBox.setSelectedIndex(0);
+        return "";
     }
 }

@@ -72,6 +72,7 @@ public class Board {
         }else{
             s.setPiece(p);
             s.setOccupied(true);
+            p.setHasMoved();
             return true;
             }
     }
