@@ -57,8 +57,8 @@ public class Controller implements ActionListener {
     //TODO: ESTENDERE CLASSE OBSERVER E FARE OVERRIDE DI UPDATE
     public void updatePossibleEndSquares(Square s) {
         if(s.getPiece() != null){
-            table.resetGraySquares(gameModel);
-            table.renderGrayPossibleEndSquares(s, gameModel);
+            table.resetGraySquares(gameModel.getBoard().getSquares());
+            table.renderGrayPossibleEndSquares(gameModel.filterLegalMoves(s.getPiece().getPossibleMoves()));
         }
 
     }
