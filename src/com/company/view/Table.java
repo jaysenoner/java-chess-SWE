@@ -95,7 +95,7 @@ public class Table {
             for(Square s: ss){
                 s.setMargin(buttonMargin);
                 String image = "";
-
+                s.setName("");
                 if(s.getPiece() != null) {
                     image = s.getPiece().getImageURL();
                     if(s.getPiece().getColor() == com.company.model.Color.BLACK){
@@ -140,15 +140,13 @@ public class Table {
         }
     }
 
-    public void renderGrayPossibleEndSquares(Square s, GameModel gameModel) {
-            ArrayList<Move> legalMoves = gameModel.filterLegalMoves(s.getPiece().getPossibleMoves());
+    public void renderGrayPossibleEndSquares(ArrayList<Move> legalMoves) {
             for(Move move : legalMoves){
                 move.getEndSquare().setBackground(Color.DARK_GRAY);
                 move.getEndSquare().setEnabled(true);
             }
     }
-    public void resetGraySquares(GameModel gameModel){
-        Square[][] chessBoardSquares = gameModel.getBoard().getSquares();
+    public void resetGraySquares(Square[][] chessBoardSquares){
         for(Square[] ss : chessBoardSquares) {
             for (Square s : ss) {
                 if (s.getBackground() == Color.DARK_GRAY) {
