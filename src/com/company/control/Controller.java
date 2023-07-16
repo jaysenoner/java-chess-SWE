@@ -48,7 +48,6 @@ public class Controller implements ActionListener {
         }
     }
 
-    //TODO: ESTENDERE CLASSE OBSERVER E FARE OVERRIDE DI UPDATE
     public void updatePossibleEndSquares(Square s) {
         if(s.getPiece() != null){
             table.resetGraySquares(gameModel.getBoard().getSquares());
@@ -121,12 +120,14 @@ public class Controller implements ActionListener {
                 if(((Square) source).getPiece().getClass() == King.class){
                     showCastling();
                 }
-                if(!gameModel.getTurn().getEnPassantMove().isEmpty()) {
-                    if (source == gameModel.getTurn().getEnPassantMove().get(0).getStartSquare()) {
-                        showEnPassant(gameModel.getTurn().getEnPassantMove().get(0));
+                ArrayList<Move> enPassantMoves = gameModel.getTurn().getEnPassantMove();
+                if(!enPassantMoves.isEmpty()) {
+                    enPassantMoves = gameModel.checkLegacyEnPassant(gameModel.getTurn().getEnPassantMove());
+                    if (enPassantMoves.size()>0 && source == enPassantMoves.get(0).getStartSquare()) {
+                        showEnPassant(enPassantMoves.get(0));
                     }
-                    if (gameModel.getTurn().getEnPassantMove().size()==2 && source == gameModel.getTurn().getEnPassantMove().get(1).getStartSquare()) {
-                        showEnPassant(gameModel.getTurn().getEnPassantMove().get(1));
+                    if (enPassantMoves.size()==2 && source == enPassantMoves.get(1).getStartSquare()) {
+                        showEnPassant(enPassantMoves.get(1));
                     }
                 }
             }

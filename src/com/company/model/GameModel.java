@@ -312,7 +312,32 @@ public class GameModel{
             board.removePiece(squareWithPieceToRemove);
         }
         //TODO: CONTROLLARE NOTAZIONE PGN ENPASSANT
+    }
+    public ArrayList<Move> checkLegacyEnPassant(ArrayList<Move> enPassantMoves) {
+        ArrayList<Move> illegalMovement = new ArrayList<>();
+        for (Move move : enPassantMoves) {
+            Piece pieceToReinsert;
+            if (move.getStartSquare().getPiece().getColor() == Color.WHITE)
+                pieceToReinsert = board.squares[3][move.getEndSquare().getPosition().getCol()].getPiece();
+            else
+                pieceToReinsert = board.squares[4][move.getEndSquare().getPosition().getCol()].getPiece();
+            executeEnPassant(move.getEndSquare());
+            if (kingIsChecked()) {
+                illegalMovement.add(move);
+            }
+            if (pieceToReinsert.getColor() == Color.WHITE) {
+                whitePlayer.getListOfPieces().add(pieceToReinsert);
+                board.squares[4][move.getEndSquare().getPosition().getCol()].setPiece(pieceToReinsert);
+            } else {
+                blackPlayer.getListOfPieces().add(pieceToReinsert);
+                board.squares[3][move.getEndSquare().getPosition().getCol()].setPiece(pieceToReinsert);
+            }
+            move.getStartSquare().setPiece(move.getEndSquare().getPiece());
+            move.getEndSquare().setPiece(null);
+        }
 
+        enPassantMoves.removeAll(illegalMovement);
+        return enPassantMoves;
     }
 }
 
