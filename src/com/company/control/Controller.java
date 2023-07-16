@@ -125,7 +125,7 @@ public class Controller implements ActionListener {
                     if (source == gameModel.getTurn().getEnPassantMove().get(0).getStartSquare()) {
                         showEnPassant(gameModel.getTurn().getEnPassantMove().get(0));
                     }
-                    if (source == gameModel.getTurn().getEnPassantMove().get(1).getStartSquare()) {
+                    if (gameModel.getTurn().getEnPassantMove().size()==2 && source == gameModel.getTurn().getEnPassantMove().get(1).getStartSquare()) {
                         showEnPassant(gameModel.getTurn().getEnPassantMove().get(1));
                     }
                 }

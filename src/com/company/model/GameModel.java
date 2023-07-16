@@ -268,7 +268,7 @@ public class GameModel{
         int col = squereOfPieceToEat.getPosition().getCol();
         Square near;
         if(squereOfPieceToEat.getPiece().getColor() == Color.WHITE) {
-            if(col-1 >0){
+            if(col-1 >=0){
                 near = board.getSquares()[4][col-1];
                 if(near.isOccupied() && near.getPiece().getClass() == Pawn.class && near.getPiece().getColor() == Color.BLACK){
                     Move move = new Move(near, board.getSquares()[5][col]);
@@ -283,7 +283,7 @@ public class GameModel{
                 }
             }
         }else{
-            if(col-1 >0){
+            if(col-1 >=0){
                 near = board.getSquares()[3][col-1];
                 if(near.isOccupied() && near.getPiece().getClass() == Pawn.class && near.getPiece().getColor() == Color.WHITE){
                     Move move = new Move(near, board.getSquares()[2][col]);
