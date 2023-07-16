@@ -6,13 +6,11 @@ import com.company.model.pieces.*;
 import java.util.ArrayList;
 
 public class Board {
-    private boolean isFirstTurn;
     public Square[][] squares;
 
 
     public Board(boolean emptyBoard) {
 
-        this.isFirstTurn = true;
         this.squares = new Square[8][8];
         int count = 0;
 
@@ -66,15 +64,12 @@ public class Board {
 
     }
 
-    public boolean addPiece(Square s, Piece p){
-        if(s.isOccupied()){
-            return false;
-        }else{
+    public void addPiece(Square s, Piece p){
+        if(!s.isOccupied()) {
             s.setPiece(p);
             s.setOccupied(true);
             p.setHasMoved();
-            return true;
-            }
+        }
     }
 
     public void removePiece(Square s){

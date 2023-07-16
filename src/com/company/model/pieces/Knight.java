@@ -11,9 +11,9 @@ public class Knight extends Piece{
     public Knight(Color color) {
         super(color);
         if( color == Color.WHITE)
-            imageURL="image/WN.gif";
+            imageURL="image/75px_white_knight.png";
         else
-            imageURL="image/BN.gif";
+            imageURL="image/75px_black_knight.png";
         listOfMovementRules.add(new KnightMovement());
     }
 

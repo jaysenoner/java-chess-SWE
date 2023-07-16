@@ -1,11 +1,7 @@
 package com.company.model;
-
-import com.company.control.Controller;
 import com.company.model.pieces.King;
+import com.company.model.pieces.Pawn;
 import com.company.model.pieces.Piece;
-import com.company.view.Table;
-
-
 import java.util.ArrayList;
 
 enum GameState{START, INPLAY, CHECK, CHECKMATE, STALEMATE}
@@ -25,7 +21,6 @@ public class GameModel{
         this.turn = whitePlayer ;
         this.movesDone = new ArrayList<>();
         this.state = GameState.START;
-
     }
 
     //getter
@@ -46,13 +41,8 @@ public class GameModel{
     }
 
 
-
     public ArrayList<String> getMovesDone() {
         return movesDone;
-    }
-
-    public GameState getState() {
-        return state;
     }
 
     public void changeTurn() {
@@ -64,6 +54,7 @@ public class GameModel{
 
     //metodo che data una mossa legale aggiorna la lista dei pezzi in caso di cattura e aggiorna la scacchiera e cambia il turno
     public void executeMove(Move move){
+
         if(move.getEndSquare().isOccupied()){
             move.getEndSquare().getPiece().setCaptured();
             if(turn.isWhite()){
@@ -80,8 +71,22 @@ public class GameModel{
         }
         blackPlayer.calculateAllPossibleMoves();
         whitePlayer.calculateAllPossibleMoves();
+        blackPlayer.getEnPassantMove().clear();
+        whitePlayer.getEnPassantMove().clear();
+        if(lastMoveWasDoubleStep(move)){
+            addEnPassantIfPossible(move.getEndSquare());
+        }
     }
-    //Metodo che esegue la mossa dell'arrocco.Non verifica che la mossa sia legale ne possibile.
+
+    private boolean lastMoveWasDoubleStep(Move move) {
+        Piece movedPiece= move.getEndSquare().getPiece();
+        if(movedPiece.getClass() == Pawn.class)
+            return( (move.getStartSquare().getPosition().getRow() == 1 && move.getEndSquare().getPosition().getRow() == 3) ||
+                (move.getStartSquare().getPosition().getRow() == 6 && move.getEndSquare().getPosition().getRow() == 4));
+        return false;
+    }
+
+    //Metodo che esegue la mossa dell'arrocco. Non verifica che la mossa sia legale ne possibile.
     public void executeCastlingMove(boolean shortCastle){
         if(turn.isWhite()){
             if(shortCastle){
@@ -106,12 +111,10 @@ public class GameModel{
                 board.updateBoard(blackPlayer.getLongCastleMove().get(1));
                 movesDone.add("O-O-O");
             }
-
         }
         changeTurn();
         blackPlayer.calculateAllPossibleMoves();
         whitePlayer.calculateAllPossibleMoves();
-
     }
 
     public void printMovesDone(){
@@ -136,7 +139,6 @@ public class GameModel{
             if(kingIsChecked()){
                 illegalMovement.add(move);
             }
-
             if(pieceToReinsert != null){
                 if(pieceToReinsert.getColor()==Color.WHITE){
                     whitePlayer.getListOfPieces().add(pieceToReinsert);
@@ -168,7 +170,7 @@ public class GameModel{
             this.whitePlayer.calculateAllPossibleMoves();
             for (Move move : this.getWhitePlayer().getListOfPossibleMoves()) {
                 if(move.getEndSquare().getPiece() != null)
-                if (move.getEndSquare().getPiece().getClass() == King.class) {
+                    if (move.getEndSquare().getPiece().getClass() == King.class) {
                     state = GameState.CHECK;
                     return true;
                 }
@@ -196,10 +198,7 @@ public class GameModel{
             state = GameState.INPLAY;
             return false;
         }
-
     }
-
-
 
     public boolean isShortCastlingLegal(){
         Player currentPlayer = this.turn;
@@ -265,13 +264,58 @@ public class GameModel{
         return pgn;
     }
 
+    public void addEnPassantIfPossible(Square squereOfPieceToEat) {
+        int col = squereOfPieceToEat.getPosition().getCol();
+        Square near;
+        if(squereOfPieceToEat.getPiece().getColor() == Color.WHITE) {
+            if(col-1 >0){
+                near = board.getSquares()[4][col-1];
+                if(near.isOccupied() && near.getPiece().getClass() == Pawn.class && near.getPiece().getColor() == Color.BLACK){
+                    Move move = new Move(near, board.getSquares()[5][col]);
+                    turn.getEnPassantMove().add(move);
+                }
+            }
+            if(col +1 <8){
+                near = board.getSquares()[4][col+1];
+                if(near.isOccupied() && near.getPiece().getClass() == Pawn.class && near.getPiece().getColor() == Color.BLACK){
+                    Move move = new Move(near, board.getSquares()[5][col]);
+                    turn.getEnPassantMove().add(move);
+                }
+            }
+        }else{
+            if(col-1 >0){
+                near = board.getSquares()[3][col-1];
+                if(near.isOccupied() && near.getPiece().getClass() == Pawn.class && near.getPiece().getColor() == Color.WHITE){
+                    Move move = new Move(near, board.getSquares()[2][col]);
+                    turn.getEnPassantMove().add(move);
+                }
+            }
+            if(col +1 <8){
+                near = board.getSquares()[3][col+1];
+                if(near.isOccupied() && near.getPiece().getClass() == Pawn.class && near.getPiece().getColor() == Color.WHITE){
+                    Move move = new Move(near, board.getSquares()[2][col]);
+                    turn.getEnPassantMove().add(move);
+                }
+            }
+        }
+    }
 
-    public void recalculatePossibleMove() {
-        blackPlayer.calculateAllPossibleMoves();
-        whitePlayer.calculateAllPossibleMoves();
+    public void executeEnPassant(Square endSquare) {
+        Square squareWithPieceToRemove;
+        if(endSquare.getPiece().getColor() == Color.WHITE ){
+            squareWithPieceToRemove = board.getSquares()[3][endSquare.getPosition().getCol()];
+            blackPlayer.getListOfPieces().remove(squareWithPieceToRemove.getPiece());
+            board.removePiece(squareWithPieceToRemove);
+        }else{
+            squareWithPieceToRemove = board.getSquares()[4][endSquare.getPosition().getCol()];
+            whitePlayer.getListOfPieces().remove(squareWithPieceToRemove.getPiece());
+            board.removePiece(squareWithPieceToRemove);
+        }
+        //TODO: CONTROLLARE NOTAZIONE PGN ENPASSANT
+
     }
 }
 
-//TODO: implementare promozione
-//TODO: testare stallo
+
+
 

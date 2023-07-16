@@ -94,6 +94,7 @@ public abstract class Piece implements Cloneable {
         this.hasMoved = true;
         this.firstMove = false;
     }
+
     public void setCaptured() {
         captured = true;
     }

@@ -1,15 +1,10 @@
 package com.company.view;
 import com.company.model.GameModel;
 import com.company.model.Move;
-import com.company.model.Player;
 import com.company.model.Square;
-import com.company.model.pieces.Piece;
-import com.company.model.pieces.Queen;
-
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 public class Table {
@@ -18,21 +13,17 @@ public class Table {
     }
 
     private final JFrame chessFrame;
-    private final Dimension frameDimension = new Dimension(1000, 1000);
+    private final Dimension frameDimension = new Dimension(650, 650);
     private static final String COLS = "ABCDEFGH";
     private JPanel chessBoardPanel;
-
-
     private JToolBar toolBar;
     private final JButton pgn;
     private final JButton newGame;
-
+    private Color brown = new Color(74, 33, 0);
+    private Color beige = new Color(161, 111, 62);
     public JButton getPgn() {
         return pgn;
     }
-
-
-
     public JButton getNewGame() {
         return newGame;
     }
@@ -45,6 +36,7 @@ public class Table {
         this.chessFrame = new JFrame("Chess");
         this.chessFrame.setSize(frameDimension);
         this.chessFrame.setVisible(true);
+        this.chessFrame.setResizable(false);
 
         this.toolBar = new JToolBar();
         this.newGame = new JButton("New Game");
@@ -78,7 +70,6 @@ public class Table {
         chessBoardPanel = new JPanel(new GridLayout(0, 9));
         chessBoardPanel.setBorder(new LineBorder(Color.BLACK));
         chessFrame.add(chessBoardPanel);
-
         renderChessBoard(gameModel);
 
         chessBoardPanel.add(new JLabel(""));
@@ -104,18 +95,21 @@ public class Table {
                     image = s.getPiece().getImageURL();
                     if(s.getPiece().getColor() == com.company.model.Color.BLACK){
                         s.setEnabled(false);
+                        s.setDisabledIcon(new ImageIcon(image));
                     }
+                    s.setIcon(new ImageIcon(image));
                 }
                 else{
                     s.setEnabled(false);
+                    s.setDisabledIcon(new ImageIcon(image));
                 }
-                ImageIcon icon = new ImageIcon(image);
-                s.setIcon(icon);
+
+
 
                 if(s.getColor() == com.company.model.Color.WHITE){
-                    s.setBackground(Color.WHITE);
+                    s.setBackground(beige);
                 }else{
-                    s.setBackground(Color.BLACK);
+                    s.setBackground(brown);
                 }
 
                 chessBoardPanel.add(s);
@@ -136,7 +130,6 @@ public class Table {
                 }else{
                     s.setDisabledIcon(null);    //Se una casa non ha pezzo imposto la sua icona da disabilitato come null
                     s.setEnabled(false);
-
                 }
                 s.setIcon(new ImageIcon(image));
             }
@@ -154,9 +147,9 @@ public class Table {
             for (Square s : ss) {
                 if (s.getBackground() == Color.DARK_GRAY) {
                     if (s.getColor() == com.company.model.Color.WHITE) {
-                        s.setBackground(Color.WHITE);
+                        s.setBackground(beige);
                     } else {
-                        s.setBackground(Color.BLACK);
+                        s.setBackground(brown);
                     }
                 }
             }
@@ -185,10 +178,11 @@ public class Table {
         }
     }
 
-    public String showPromoteAlert() {
-        String[] numbers = {"Queen", "Knight", "Bishop", "Rook"};
-        JComboBox<String> comboBox = new JComboBox<>(numbers);
-        comboBox.setSelectedIndex(0);
-        return "";
+    public String showPromotionDialog() {
+        String[] options = {"Queen", "Knight", "Bishop", "Rook"};
+        int x = JOptionPane.showOptionDialog(null, "Select the piece you want to promote into",
+                "Promotion!",
+                JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+        return options[x];
     }
 }

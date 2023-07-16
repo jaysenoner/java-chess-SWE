@@ -14,9 +14,9 @@ public class Pawn extends Piece{
     public Pawn(Color color) {
         super(color);
         if( color == Color.WHITE)
-            imageURL="image/WP.gif";
+            imageURL="image/75px_white_pawn.png";
         else
-            imageURL="image/BP.gif";
+            imageURL="image/75px_black_pawn.png";
         listOfMovementRules.add(new PawnMovement());
     }
 
@@ -29,6 +29,4 @@ public class Pawn extends Piece{
     public String getRightLetterForChessNotation() {
         return "";
     }
-
-
 }

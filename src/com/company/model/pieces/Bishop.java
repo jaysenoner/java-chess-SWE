@@ -10,9 +10,9 @@ public class Bishop extends Piece {
     public Bishop(Color color) {
         super(color);
         if( color == Color.WHITE)
-            imageURL="image/WB.gif";
+            imageURL="image/75px_white_bishop.png";
         else
-            imageURL="image/BB.gif";
+            imageURL="image/75px_black_bishop.png";
         listOfMovementRules.add(new DiagonalMovement(true));
     }
 

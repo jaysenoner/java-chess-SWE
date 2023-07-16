@@ -1,16 +1,10 @@
 package com.company.control;
-
-
 import com.company.model.GameModel;
 import com.company.model.Move;
 import com.company.model.Player;
 import com.company.model.Square;
-import com.company.model.pieces.King;
-import com.company.model.pieces.Pawn;
-import com.company.model.pieces.Piece;
-import com.company.model.pieces.Queen;
+import com.company.model.pieces.*;
 import com.company.view.Table;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -127,6 +121,14 @@ public class Controller implements ActionListener {
                 if(((Square) source).getPiece().getClass() == King.class){
                     showCastling();
                 }
+                if(!gameModel.getTurn().getEnPassantMove().isEmpty()) {
+                    if (source == gameModel.getTurn().getEnPassantMove().get(0).getStartSquare()) {
+                        showEnPassant(gameModel.getTurn().getEnPassantMove().get(0));
+                    }
+                    if (source == gameModel.getTurn().getEnPassantMove().get(1).getStartSquare()) {
+                        showEnPassant(gameModel.getTurn().getEnPassantMove().get(1));
+                    }
+                }
             }
 
             else if (((Square) source).getBackground() == Color.DARK_GRAY) {
@@ -143,12 +145,17 @@ public class Controller implements ActionListener {
                     gameModel.executeMove(moveToExecute);
                     if(currentEndSquare.getPiece().getClass() == Pawn.class &&
                             (currentEndSquare.getPosition().getRow()== 0 ||currentEndSquare.getPosition().getRow()== 7)){
-                        promotePawn(currentEndSquare);
+                        //Mostro OptionDialog per selezionare il pezzo
+                        String promotionPiece = table.showPromotionDialog();
+                        promotePawn(currentEndSquare, promotionPiece);
+
                     }
+                }
+                if(((Square) source).getName().equals("en_passant_square")){
+                    gameModel.executeEnPassant((Square) source);
                 }
                 table.repaintChessBoard(gameModel.getBoard().getSquares(), gameModel.getTurn().isWhite());
                 table.resetGraySquares(gameModel.getBoard().getSquares());
-                //gameModel.recalculatePossibleMove();
 
                 //contrtollo se il giocatore ha subito scacco matto, in caso arresto il gioco e stampo un alert
                 if(gameModel.kingIsCheckMated()){
@@ -177,8 +184,17 @@ public class Controller implements ActionListener {
         }
     }
 
-    private void promotePawn(Square currentEndSquare) {
+    private void showEnPassant(Move move) {
+        Square enPassantSquare= move.getEndSquare();
+        enPassantSquare.setName("en_passant_square");
+        enPassantSquare.setBackground(Color.DARK_GRAY);
+        enPassantSquare.setEnabled(true);
+    }
+
+    private void promotePawn(Square currentEndSquare, String promotionPiece ) {
         Player playerToPromote;
+        ArrayList<String> movesDone = gameModel.getMovesDone();
+        String lastMove = movesDone.get(movesDone.size()-1);
         if(gameModel.getTurn().isWhite()){
             playerToPromote = gameModel.getBlackPlayer();
         }else{
@@ -187,8 +203,25 @@ public class Controller implements ActionListener {
         playerToPromote.getListOfPieces().remove(currentEndSquare.getPiece());
         gameModel.getBoard().removePiece(currentEndSquare);
 
-        Piece newPiece= new Queen(playerToPromote.getKing().getColor());
-
+        Piece newPiece = null;
+        switch (promotionPiece) {
+            case "Queen" -> {
+                newPiece = new Queen(playerToPromote.getKing().getColor());
+                movesDone.set(movesDone.size()-1, lastMove + "=Q");
+            }
+            case "Knight" -> {
+                newPiece = new Knight(playerToPromote.getKing().getColor());
+                movesDone.set(movesDone.size()-1, lastMove + "=N");
+            }
+            case "Bishop" -> {
+                newPiece = new Bishop(playerToPromote.getKing().getColor());
+                movesDone.set(movesDone.size()-1, lastMove + "=B");
+            }
+            case "Rook" -> {
+                newPiece = new Rook(playerToPromote.getKing().getColor());
+                movesDone.set(movesDone.size()-1, lastMove + "=R");
+            }
+        }
         gameModel.getBoard().addPiece(currentEndSquare, newPiece);
         playerToPromote.getListOfPieces().add(newPiece);
 

@@ -1,6 +1,7 @@
 package com.company.model;
 
 import com.company.model.pieces.King;
+import com.company.model.pieces.Pawn;
 import com.company.model.pieces.Piece;
 
 import java.util.ArrayList;
@@ -13,14 +14,7 @@ public class Player {
     private Piece king;
     private Piece shortCastleRook;
     private Piece longCastleRook;
-
-    public ArrayList<Move> getShortCastleMove() {
-        return shortCastleMove;
-    }
-
-    public ArrayList<Move> getLongCastleMove() {
-        return longCastleMove;
-    }
+    private ArrayList<Move> enPassantMove;
 
     private ArrayList<Move> shortCastleMove;
     private ArrayList<Move> longCastleMove;
@@ -32,6 +26,7 @@ public class Player {
         listOfPieces = new ArrayList<>();
         shortCastleMove = new ArrayList<>();
         longCastleMove = new ArrayList<>();
+        enPassantMove = new ArrayList<>();
         if(isWhite) {
             this.color = Color.WHITE;
             king = board.squares[7][4].getPiece();
@@ -114,4 +109,15 @@ public class Player {
     public Piece getLongCastleRook() {
         return longCastleRook;
     }
+
+    public ArrayList<Move> getShortCastleMove() {
+        return shortCastleMove;
+    }
+
+    public ArrayList<Move> getLongCastleMove() {
+        return longCastleMove;
+    }
+     public ArrayList<Move> getEnPassantMove(){return  enPassantMove;}
+
+
 }
